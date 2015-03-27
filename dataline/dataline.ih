@@ -1,0 +1,9 @@
+/* internal HEADER of the class*/
+
+#include "dataline.h"
+
+//#include <iostream>
+#include <string>
+
+using namespace std;
+
