@@ -23,8 +23,9 @@ class Dataline
     void setX(double xpos);
     void setY(double ypos);
     void setSize(double psize);
-//    void setValidity(bool valid);
     void setValidity(bool valid);
+    
+    void extractData(string& line);
     
     // there is a g in front of the name because it's then easier to recognize the file names of set versus get functions.
     bool isMSG() const;
@@ -34,7 +35,6 @@ class Dataline
     double g_psize() const;
     bool isValid() const;
     
-//     void detValidity(double (*g_psize)());
     
   private:
 };

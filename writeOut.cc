@@ -1,6 +1,7 @@
 #include "main.ih"
 
-TrialInfo writeOut(Dataline eye, ofstream& outputfile, TrialInfo trialSet)
+//TrialInfo writeOut(Dataline eye, ofstream& outputfile, TrialInfo trialSet)
+size_t writeOut(Dataline eye, ofstream& outputfile, TrialInfo trialSet)
 {
   // if time is right: average and define belonging to ROIs  
     
@@ -19,5 +20,6 @@ TrialInfo writeOut(Dataline eye, ofstream& outputfile, TrialInfo trialSet)
     << '\t' << trialSet.g_Fix()
     << '\n';
       
-  return(trialSet);
+//  return(trialSet);
+  return 0;
 }

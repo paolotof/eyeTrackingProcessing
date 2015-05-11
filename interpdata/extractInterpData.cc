@@ -5,8 +5,8 @@ Interpdata Interpdata::extractInterpData(string& lineBegin, string& lineEnd)
   
   istringstream firstLine(lineBegin);
   string sub;
-  size_t ntrial, ibeg, iend; 
-  double xBeg, xEnd, yBeg, yEnd, pBeg, pEnd;
+  size_t ntrial; //ibeg, iend; 
+  double ibeg, iend, xBeg, xEnd, yBeg, yEnd, pBeg, pEnd;
   
   firstLine >> sub >> ntrial >> ibeg >> xBeg >> yBeg >> pBeg;
 

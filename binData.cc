@@ -47,7 +47,6 @@ size_t binData(string filename)
       vector<double>().swap(dOneV);
       vector<double>().swap(dTwoV);
       vector<double>().swap(fixV);
-
     }
 
     // this must be done afterwards otherwise all the values of the first timepoint

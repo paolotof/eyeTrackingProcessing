@@ -2,5 +2,5 @@
 
 void TrialInfo::addOneBin()
 {
-  d_binCount = TrialInfo::totalBins() + 1; 
+  ++d_binCount;
 }

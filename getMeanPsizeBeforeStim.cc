@@ -15,10 +15,10 @@ size_t getMeanPsizeBeforeStim(ifstream& trialInfoFile, string filename)
   string trialInfo;
   getline(trialInfoFile, trialInfo);
   
-  TrialInfo i;
-  i = trialSetup(trialInfo, i); 
-  i.setCurrentTr(0);
-  string subNum = i.g_subject();  
+  TrialInfo trialSet;
+  trialSet.extractInfo(trialInfo); 
+  trialSet.setCurrentTr(0);
+  string subNum = trialSet.g_subject();  
   
   while (true)
   {
@@ -40,7 +40,7 @@ size_t getMeanPsizeBeforeStim(ifstream& trialInfoFile, string filename)
       
       while (getline(eyetrackingFile, line))
       {
-	eye = extractData(line);
+	eye.extractData(line);
 
 	if ((not eye.isMSG() == true) && eye.isValid()) 
 	{
@@ -57,15 +57,15 @@ size_t getMeanPsizeBeforeStim(ifstream& trialInfoFile, string filename)
 	
 	if (line.find("onsetVisualStim") != string::npos) // because of the delay it might happen that for the first subject onset of sound file is too late already.
 	{
-	  i.setCurrentTr(i.g_currentTr() + 1);
+	  trialSet.setCurrentTr(trialSet.g_currentTr() + 1);
 	  // average the values subtracting by the number of lines
-	  if (i.g_currentTr() == i.g_trialIN())
+	  if (trialSet.g_currentTr() == trialSet.g_trialIN())
 	  {
-	    outputfile << i.g_subject() << '\t' 
-	      << i.g_condition()  << '\t' 
-	      << i.g_target() << '\t' 
-	      << i.g_trialIN() << '\t' 
-	      << i.g_subCond() << '\t' 
+	    outputfile << trialSet.g_subject() << '\t' 
+	      << trialSet.g_condition()  << '\t' 
+	      << trialSet.g_target() << '\t' 
+	      << trialSet.g_trialIN() << '\t' 
+	      << trialSet.g_subCond() << '\t' 
 	      << static_cast<size_t>(vectorMean(tVect)) << '\t'
 	      << static_cast<size_t>(vectorMean(pVect)) << '\n';
 	  }
@@ -78,8 +78,8 @@ size_t getMeanPsizeBeforeStim(ifstream& trialInfoFile, string filename)
 	  {
 	    if (line.find("TRIAL ENDS") != string::npos)
 	    {
-	      if (i.g_currentTr() == i.g_trialIN()) 
-		i = endTrial(trialInfoFile, i);
+	      if (trialSet.g_currentTr() == trialSet.g_trialIN()) 
+		trialSet.resetAndUpdate(trialInfoFile);
 	      break;
 	    }
 	  }
@@ -91,9 +91,9 @@ size_t getMeanPsizeBeforeStim(ifstream& trialInfoFile, string filename)
       }
     }
     eyetrackingFile.close();
-    i.setCurrentTr(0);
+    trialSet.setCurrentTr(0);
     cout << " processed \n";
-    subNum = i.g_subject();  
+    subNum = trialSet.g_subject();  
         
     if (trialInfoFile.eof())
       break;

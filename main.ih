@@ -29,16 +29,13 @@ void usage(string const &progname);
 Dataline extractData(string& line);
 // Dataline (*pExtractData)(string& line) = extractData;
 
-TrialInfo trialSetup(string& line, TrialInfo i);
-//TrialInfo (*pTrialSetup)(string& line, TrialInfo i) = trialSetup;
-
 /* functions modifying the data */
 
 char classifyXpos(double xpos, bool charlotte);
 char classifyYpos(double ypos, bool charlotte);
 size_t classifyArea(double xpos, double ypos, const string& pos2match, size_t posID, bool charlotte);
 
-size_t processData(ifstream& trialInfoFile, string filename, bool charlotte);
+size_t processData(ifstream& trialInfoFile, string filename, bool charlotte, string dir2save);
 
 double linearInterpolate(double y1, double y2, double mu);
 double sum(double v[], size_t n);
@@ -48,30 +45,21 @@ double vectorMedian(vector<double> dataArray);
 int checkTargetFixations(ifstream& trialInfoFile);
 
 string checkBlinks(ifstream& trialInfoFile, size_t reportType, string filename);
-string checkBlinksAndGetInterpBounds(ifstream& trialInfoFile, size_t reportType, string filename);
+string checkBlinksAndGetInterpBounds(ifstream& trialInfoFile, size_t reportType, string filename,
+				     string dir2save);
 
-//void resetArray(double (*dataArray), size_t nEl);
-//void resetArray(double (*dataArray)[5], size_t nEl);
-
-TrialInfo AssignAreaAndWriteOut(double (*dataArray), ofstream& outputfile, TrialInfo i, bool charlotte);
-TrialInfo endTrial(ifstream& trialInfoFile, TrialInfo i);
-
-// TrialInfo handleExceptions(ifstream& trialInfoFile, double (*dataArray)[5], ofstream& outputfile, TrialInfo trialSet, string line);
+size_t AssignAreaAndWriteOut(double (*dataArray), ofstream& outputfile, TrialInfo i, bool charlotte);
 
 TrialInfo interpolateBlinks(ifstream& trialInfoFile, ifstream& eyetrackingFile, ofstream& outputfile, 
 			    TrialInfo trialSet, Dataline preBlinK, Interpdata interpolation, bool charlotte);
-TrialInfo interpolateShortBlinks(ofstream& outputfile, TrialInfo trialSet, Dataline preBlinK, 
+size_t interpolateShortBlinks(ofstream& outputfile, TrialInfo trialSet, Dataline preBlinK, 
 				 Dataline postBlinK, size_t lines2interp, bool charlotte);
-TrialInfo interpolateLongBlinks(ofstream& outputfile, TrialInfo trialSet, Interpdata interpolation, 
+bool interpolateLongBlinks(ofstream& outputfile, TrialInfo trialSet, Interpdata interpolation, 
 				bool charlotte);
-
-TrialInfo computeTargetOnset(TrialInfo i, string line);
 
 int getFixationsFromSentenceOnset(ifstream& trialInfoFile);
 
-// size_t getMeanPsizeBeforeStim(ifstream& trialInfoFile);
 size_t getMeanPsizeBeforeStim(ifstream& trialInfoFile, string filename);
-// TrialInfo handleExceptions(line);
 
 
 size_t averageFirst200(string filename);
@@ -80,11 +68,11 @@ string baselineAndUpdate(vector<double> xpos, vector<double> ypos, vector<double
 
 double vectorMean(vector<double> values);
 
-void testNewClass();
 size_t binData(string filename);
 
 size_t extractPupil(ifstream& trialInfoFile, string filename);
-TrialInfo export1SecFromHere(ifstream& trialInfoFile, TrialInfo trialSet, string line, ifstream& eyetrackingFile, 
+
+size_t export1SecFromHere(ifstream& trialInfoFile, TrialInfo trialSet, string line, ifstream& eyetrackingFile, 
 			     ofstream& outputfile, vector<double> tVect, vector<double> pVect);
 
-TrialInfo writeOut(Dataline eye, ofstream& outputfile, TrialInfo trialSet);
+size_t writeOut(Dataline eye, ofstream& outputfile, TrialInfo trialSet);

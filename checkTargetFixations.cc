@@ -28,9 +28,9 @@ int checkTargetFixations(ifstream& trialInfoFile)
   string trialInfo;
   while (getline(trialInfoFile, trialInfo))
   {
-    TrialInfo i;
-    i = trialSetup(trialInfo, i);  
-    string subNum = i.g_subject();  
+    TrialInfo trialSet;
+    trialSet.extractInfo(trialInfo);
+    string subNum = trialSet.g_subject();  
     
     ifstream eyetrackingFile(subNum.append(".asc"));
     if (! eyetrackingFile.is_open())
@@ -49,22 +49,22 @@ int checkTargetFixations(ifstream& trialInfoFile)
 	if (line.find("onsetSoundStim") != string::npos)
 	{
 	  iTrial++;
-	  if (iTrial == i.g_trialIN())
+	  if (iTrial == trialSet.g_trialIN())
 	  {
 	    istringstream linedata(line); 
 	    string rubbish;
 	    size_t timeZero;
 	    linedata >> rubbish >> timeZero;
-	    onsetWord = timeZero + i.g_targetStarts();
+	    onsetWord = timeZero + trialSet.g_targetStarts();
 	  } // end of "if (iTrial == trial2include)"
 	} // end of "if (line.find("SoundStim") != string::npos)"
 	
-	if (iTrial == i.g_trialIN())
+	if (iTrial == trialSet.g_trialIN())
 	{
 	  if (line.find("TRIAL ENDS") != string::npos)
 	  {
 	    getline(trialInfoFile, trialInfo); 
-	    i = trialSetup(trialInfo, i); 
+	    trialSet.extractInfo(trialInfo);
 	  }
 	  
 	  if ((line.find("EFIX") != string::npos))
@@ -83,13 +83,13 @@ int checkTargetFixations(ifstream& trialInfoFile)
 	      xpos >> ypos >> psize;
 
 	    if (etime >= onsetWord)
-	      outputfile << i.g_subject() << '\t' << i.g_trialIN()  << '\t' <<
-		i.g_target() << '\t' << xpos << '\t' << ypos << '\t' << 
+	      outputfile << trialSet.g_subject() << '\t' << trialSet.g_trialIN()  << '\t' <<
+		trialSet.g_target() << '\t' << xpos << '\t' << ypos << '\t' << 
 		psize << '\t' << etime-onsetWord << '\n';
 		// psize << '\t' << etime-stime << '\n';
 		
 	  } // if (line.find("EFIX") != string::npos) 
-	} // if (iTrial == i.g_trialIN())
+	} // if (iTrial == trialSet.g_trialIN())
       } // while (getline(eyetrackingFile, line))
       
       eyetrackingFile.close();

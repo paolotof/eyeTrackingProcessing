@@ -15,10 +15,9 @@ string checkBlinks(ifstream& trialInfoFile, size_t reportType, string filename)
   outputfile.open(filename);
   
   string trialInfo;
+  TrialInfo trialSet;
   while (getline(trialInfoFile, trialInfo))
   {
-    TrialInfo trialSet;
-    trialSet = trialSetup(trialInfo, trialSet);  
     string subNum = trialSet.g_subject();  
       
     ifstream eyetrackingFile(subNum.append(".asc"));
@@ -30,7 +29,6 @@ string checkBlinks(ifstream& trialInfoFile, size_t reportType, string filename)
     else
     {
       size_t iTrial = 0;
-      size_t onsetWord = 0;
       
       string line;
       Dataline eye;
@@ -38,20 +36,10 @@ string checkBlinks(ifstream& trialInfoFile, size_t reportType, string filename)
       while (getline(eyetrackingFile, line))
       {
 	if (line.find("onsetSoundStim") != string::npos)
-	{
-	  iTrial++;
-	  if (iTrial == trialSet.g_trialIN())
-	  {
-	    istringstream linedata(line); // extract time information from the eyetracking file
-	    string msgType;
-	    size_t timeZero;
-	    linedata >> msgType >> timeZero;
-	    onsetWord = timeZero + trialSet.g_targetStarts();
-	  } // end of "if (iTrial == trial2include)"
-	} // end of "if (line.find("SoundStim") != string::npos)"
+	  trialSet.updateCurrentTrial(line);
 	
 	//   update trial information
-	 if ((line.find("TRIAL ENDS") != string::npos) && (iTrial == trialSet.g_trialIN()))
+	if ((line.find("TRIAL ENDS") != string::npos) && (iTrial == trialSet.g_trialIN()))
 	{
 	  if (reportType == 1)
 	  {
@@ -60,14 +48,14 @@ string checkBlinks(ifstream& trialInfoFile, size_t reportType, string filename)
 	    includeTrial = true; // reset include trials
 	  }
 	  getline(trialInfoFile, trialInfo); 
-	  trialSet = trialSetup(trialInfo, trialSet); 
+	  trialSet.extractInfo(trialInfo);
 	}
 
-	eye = extractData(line);
+	eye.extractData(line);
 
 	if (line.find("EBLINK") != string::npos)
 	{ 
-	  if ((iTrial == trialSet.g_trialIN()) && (eye.g_time() >= onsetWord))
+	  if ((iTrial == trialSet.g_trialIN()) && (eye.g_time() >= trialSet.g_targetOnset()))
 	  {
 	    istringstream linedata(line); // extract time information from the datafile
 	    string msgType, side;
@@ -84,7 +72,7 @@ string checkBlinks(ifstream& trialInfoFile, size_t reportType, string filename)
 	      {
 // 		blinksReport << subNum << ' ' << iTrial << ' ' << timeStart 
 // 		  << " blink (ms) = " << timeEnd - timeStart 
-// 		  << " from word onset = " << timeEnd - onsetWord << '\n';
+// 		  << " from word onset = " << timeEnd - trialSet.g_targetOnset() << '\n';
 		blinksReport << subNum << ' ' << iTrial << ' ' 
 		  << timeEnd - timeStart; 
 		// add info about interpolation. These are the time for the beginning and 

@@ -1,6 +1,7 @@
 #include "main.ih"
 
-TrialInfo AssignAreaAndWriteOut(double (*dataArray), ofstream& outputfile, TrialInfo trialSet, bool charlotte)
+//TrialInfo AssignAreaAndWriteOut(double (*dataArray), ofstream& outputfile, TrialInfo trialSet, bool charlotte)
+size_t AssignAreaAndWriteOut(double (*dataArray), ofstream& outputfile, TrialInfo trialSet, bool charlotte)
 {
   // if time is right: average and define belonging to ROIs  
   int timeNow = static_cast<int>(dataArray[0]);
@@ -15,7 +16,7 @@ TrialInfo AssignAreaAndWriteOut(double (*dataArray), ofstream& outputfile, Trial
 
   propFix2ROIs[areaInfo - 1] = 1;
   
-  trialSet.addOneBin(); // remove this to NOT include bin numbers anymore, also line 24 
+//   cout << trialSet.totalBins() + 1;
   int timeDif = timeNow - trialSet.g_targetOnset();
   outputfile << trialSet.g_subject() 
     << '\t' << timeNow  
@@ -30,8 +31,6 @@ TrialInfo AssignAreaAndWriteOut(double (*dataArray), ofstream& outputfile, Trial
     << propFix2ROIs[3] << '\t' 
     << trialSet.g_Fix() << '\n';
       
-/*       << '\t' << timeDif / 4
-      << '\t' << trialSet.g_Bin() */
       
     /*
     *
@@ -41,7 +40,6 @@ TrialInfo AssignAreaAndWriteOut(double (*dataArray), ofstream& outputfile, Trial
       << '\t' << (timeNow - i.g_targetOnset()) / 4 
     * to fix the problem of the negative fixations, otherwise all the further analysis 
     * will be screwed up because the numbering of the bins always starts from 0.  
-  */    
-//   }    
-  return(trialSet);
+    */    
+  return 0;
 }

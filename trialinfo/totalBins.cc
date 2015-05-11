@@ -2,5 +2,5 @@
 
 size_t TrialInfo::totalBins() const
 {
-  return d_binCount; 
+  return d_binCount;
 }

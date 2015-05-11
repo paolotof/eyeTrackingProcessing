@@ -11,8 +11,10 @@
  * 
  */ 
 
-TrialInfo export1SecFromHere(ifstream& trialInfoFile, TrialInfo trialSet, string line, ifstream& eyetrackingFile, ofstream& outputfile,
-			     vector<double> tVect, vector<double> pVect)
+// TrialInfo export1SecFromHere(ifstream& trialInfoFile, TrialInfo trialSet, string line, ifstream& eyetrackingFile, 
+// 			     ofstream& outputfile, vector<double> tVect, vector<double> pVect)
+size_t export1SecFromHere(ifstream& trialInfoFile, TrialInfo trialSet, string line, ifstream& eyetrackingFile, 
+			     ofstream& outputfile, vector<double> tVect, vector<double> pVect)
 {
   trialSet.setCurrentTr(trialSet.g_currentTr() + 1);
   
@@ -39,14 +41,14 @@ TrialInfo export1SecFromHere(ifstream& trialInfoFile, TrialInfo trialSet, string
       eye.setTime(tVect.at(iloop));
       eye.setSize(pVect.at(iloop));
       trialSet.addOneBin(); // remove this to NOT include bin numbers anymore, also line 24 
-      trialSet = writeOut(eye, outputfile, trialSet);
+      writeOut(eye, outputfile, trialSet);
     } // end "for (size_t iloop = 0, iloop < nLines, iloop++)"
 
     size_t OneSecInLines = 1000/4;
     for (size_t iloop = 0; iloop < OneSecInLines; iloop++)
     {
       if (line.find("TRIAL ENDS") != string::npos)
-	trialSet = endTrial(trialInfoFile, trialSet);
+	trialSet.resetAndUpdate(trialInfoFile);
       
       if (line.find("SFIX") != string::npos)
 	trialSet.setFix(trialSet.g_Fix() + 1);
@@ -63,17 +65,18 @@ TrialInfo export1SecFromHere(ifstream& trialInfoFile, TrialInfo trialSet, string
 	}
       }
       
-      eye = extractData(line);
+      eye.extractData(line);
       
       if((eye.isMSG() != true) && (eye.g_xpos() > 0.1) 
 	&& (eye.g_ypos() > 0.1) && eye.isValid())
       { 
 	trialSet.addOneBin();
-	trialSet = writeOut(eye, outputfile, trialSet);
+	writeOut(eye, outputfile, trialSet);
       }
 	
     } // end "for (size_t iloop = 0, iloop < nLines, iloop++)"
   }
 
-  return(trialSet);
+//   return(trialSet);
+  return 0;
 }

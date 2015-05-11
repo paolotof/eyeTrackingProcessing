@@ -13,7 +13,7 @@ size_t extractPupil(ifstream& trialInfoFile, string filename)
   string trialInfo;
   getline(trialInfoFile, trialInfo);
   TrialInfo trialSet;
-  trialSet = trialSetup(trialInfo, trialSet);
+  trialSet.extractInfo(trialInfo);
   string subNum = trialSet.g_subject();  
   size_t nlines = 125;
   
@@ -49,9 +49,9 @@ size_t extractPupil(ifstream& trialInfoFile, string filename)
 	  getline(eyetrackingFile, line);
 	  
 	if (line.find("onsetSoundStim") != string::npos)
-	  trialSet = export1SecFromHere(trialInfoFile, trialSet, line, eyetrackingFile, outputfile, tVect, pVect); 
+	  export1SecFromHere(trialInfoFile, trialSet, line, eyetrackingFile, outputfile, tVect, pVect); 
 	
-	eye = extractData(line);
+	eye.extractData(line);
 	if ((not eye.isMSG() == true) && eye.isValid()) 
 	{
 	  tVect.push_back(eye.g_time());

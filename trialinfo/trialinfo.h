@@ -2,6 +2,9 @@
 #define INCLUDED_TRIALINFO_
 
 #include <string>
+#include <sstream> 
+#include <fstream>
+
 using namespace std;
 
 class TrialInfo
@@ -23,48 +26,59 @@ class TrialInfo
   size_t d_binCount = 0;
   size_t d_fixCount = 1; // always starts with 1 and then update
   bool d_updateInterp; 
+  size_t d_limit4extraction = 2000;
+  size_t d_timeIsUp;
   
   public:
     TrialInfo();
     
-    void setSubject(string Subject);
-    void setTrialIN(size_t Trial);
-    void setCurrentTr(size_t Trial);
-    void setOnsetTarget(size_t onset);
-    void setTargetLoc(string TargetLoc);
+// SETTERS    
+    void setBin(size_t iBin);
     void setCompetLoc(string CompetLoc);
+    void setCondition(string Condition);
+    void setCurrentTr(size_t Trial);
     void setDist1Loc(string Dist1Loc);
     void setDist2Loc(string Dist2Loc);
-    void setTarget(string Target);
-    void setCondition(string Condition);
-    void setTargetStarts(size_t TargetStarts);
+    void setFix(size_t numFixes);
+    void setOnsetTarget(size_t onset);
     void setRT(size_t RT);
     void setSubCond(string SubCond);
-    void setBin(size_t iBin);
+    void setSubject(string Subject);
+    void setTarget(string Target);
+    void setTargetLoc(string TargetLoc);
+    void setTargetStarts(size_t TargetStarts);
+    void setTimeIsUp();
+    void setTrialIN(size_t Trial);
     void addOneBin();
+    void updateBinCount(size_t nBins);
+    void computeTargetLimits(string& line);
+    void extractInfo(string& line);
+    void resetAndUpdate(ifstream& trialInfoFile);
     void resetBinsCounter();
-    void setFix(size_t numFixes);
-    void setUpdateInterp(bool value); 
-    
+    void updateCurrentTrial(string& line);
+    void updateInterp(bool value); 
+// GETTERS    
     // there is a g in front of the name because it's then easier to recognize the file names of set versus get functions.
-    string g_subject() const;
-    size_t g_trialIN() const;
-    string g_targetLoc() const;
+    size_t g_Bin() const;
     string g_competLoc() const;
+    string g_condition() const;
+    size_t g_currentTr() const;
     string g_dist1Loc() const;
     string g_dist2Loc() const;
-    string g_target() const;
-    string g_condition() const;
-    size_t g_targetStarts() const;
+    size_t g_Fix() const;
     size_t g_RT() const;
     string g_subCond() const;
-    size_t g_currentTr() const;
+    string g_subject() const;
+    string g_target() const;
+    string g_targetLoc() const;
     size_t g_targetOnset() const;
-    size_t g_Bin() const;
+    size_t g_targetStarts() const;
+    size_t g_trialIN() const;
+    bool   g_updateInterp() const;
+    size_t limit4extraction() const; // this value is set with a default and never modified
+    size_t timeIsUp() const;
     size_t totalBins() const;
-    size_t g_Fix() const;
-    bool g_updateInterp() const;
-    
+
   private:
 };
  

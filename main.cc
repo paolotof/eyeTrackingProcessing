@@ -16,12 +16,7 @@ try
     "  9 - Average Baseline first 200 ms before Visual Onset\n"
     " 10 - exit\n"
     " 11 - 4, 5, 6, 8, and 9 together \n"
-    "> ";
-  if (argc == 1)
-    testNewClass();
-  else
-  {
-      
+    "> ";      
       
     size_t reportType;
     cin >> reportType;
@@ -31,20 +26,26 @@ try
     
     string filename = argv[1];
     
-    string outputfile = "tbt";
+    string outputfile = "tbt_";
+    string dir2save = "/home/paolot/results/tmpTestsAnita/";
+//     dir2save = "";
+    //outputfile.insert(outputfile.begin(), dir2save);
+    outputfile.insert(0, dir2save);
+    filename.insert(0, dir2save);
     
     if (filename.find("noFillers") != string::npos)
       outputfile.append("noFillers");
     else
       outputfile.append("withFillers");
       
-    cout << outputfile << '\n';
+    //cout << outputfile << '\n';
     
     ifstream trialInfoFile(filename);
     if (!trialInfoFile.is_open())
       cout << "Unable to open "<< filename << '\n';
     else
     {
+      
       switch (reportType) 
       {
 	case 1:
@@ -68,13 +69,13 @@ try
 	case 4:
 	{
 	  cout << "Exclude trials with too long blinks \n\n";
-	  checkBlinksAndGetInterpBounds(trialInfoFile, 1, filename);
+	  checkBlinksAndGetInterpBounds(trialInfoFile, 1, filename, dir2save);
 	break;
 	}
 	case 5:
 	{
 	  cout << "EXPORTING\n\n";
-	  processData(trialInfoFile, outputfile, charlotte);
+	  processData(trialInfoFile, outputfile, charlotte, dir2save);
 	  break;
 	}
 	case 6:
@@ -110,7 +111,7 @@ try
 	{
 	  cout << "All processing in a row!!!\n\n";
 	  cout << "Exclude trials with too long blinks \n\n";
-	  checkBlinksAndGetInterpBounds(trialInfoFile, 1, filename);
+	  checkBlinksAndGetInterpBounds(trialInfoFile, 1, filename, dir2save);
 	  filename.replace(filename.find(".txt"), 4, "_noBlinks.txt");
 	  ifstream updatedTrialInfoFile(filename);
 	  if (not updatedTrialInfoFile.is_open())
@@ -118,7 +119,7 @@ try
 	  else
 	  {
 	    cout << "EXPORTING\n\n";
-	    processData(updatedTrialInfoFile, outputfile, charlotte);
+	    processData(updatedTrialInfoFile, outputfile, charlotte, dir2save);
 	    cout << "BINNING\n\n";
 	    binData(outputfile);
 	    cout << "Average Baseline Before Stimulus Onset\n\n";
@@ -137,7 +138,7 @@ try
 	}
       }
     }
-  } // ifelse test session  
+//   } // ifelse test session  
   
 } // end main
 catch (...)

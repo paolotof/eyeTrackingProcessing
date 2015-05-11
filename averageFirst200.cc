@@ -48,9 +48,7 @@ size_t averageFirst200(string filename)
 	    break;
 	  }
 	    
-	  eye = extractData(line);
-	  
-// 	  cout << eye.g_psize() << '\n';
+	  eye.extractData(line);
 	  
 	  if (eye.isMSG() == false)
 	  {
@@ -78,9 +76,7 @@ size_t averageFirst200(string filename)
 	vector<double>().swap(ypos);
 	vector<double>().swap(psize);
 	
-	
       } // end "if(! eyetrackingFile.is_open()") 
-      
       
       if (subInfoFile.eof())
 	break;
