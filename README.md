@@ -14,3 +14,4 @@ The script:
 # TODO list:
 - implement better use of c++ containers
 - implementation of parallel computing routines
+- traslate the icmake routines into cmake
