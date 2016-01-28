@@ -1,0 +1,83 @@
+#include <iostream>
+#include <string>
+#include <fstream> // this is to open the text file
+#include <sstream> // to use isstringstream functionality
+#include <vector>
+#include <iomanip> // to keep the format of numbers right
+//#include <new>  // for operator new[]
+
+namespace Icmbuild
+{
+    extern char version[];
+    extern char years[];
+    extern char author[];
+};
+
+void usage(std::string const &progname);
+
+using namespace std;
+
+// class declarations
+#include "dataline/dataline.h"
+#include "trialinfo/trialinfo.h"
+#include "interpdata/interpdata.h"
+
+// below here goes the function which use the class
+
+void usage(string const &progname);
+
+Dataline extractData(string& line);
+// Dataline (*pExtractData)(string& line) = extractData;
+
+/* functions modifying the data */
+
+char classifyXpos(double xpos, bool charlotte);
+char classifyYpos(double ypos, bool charlotte);
+size_t classifyArea(double xpos, double ypos, const string& pos2match, size_t posID, bool charlotte);
+
+size_t processData(ifstream& trialInfoFile, string filename, bool charlotte, string dir2save, size_t timeBefore);
+
+double linearInterpolate(double y1, double y2, double mu);
+double sum(double v[], size_t n);
+double mean(double v[], size_t n);
+double vectorMedian(vector<double> dataArray); 
+
+int checkTargetFixations(ifstream& trialInfoFile);
+
+string checkBlinks(ifstream& trialInfoFile, size_t reportType, string filename);
+string checkBlinksAndGetInterpBounds(ifstream& trialInfoFile, size_t reportType, string filename,
+				     string dir2save);
+
+size_t AssignAreaAndWriteOut(double (*dataArray), ofstream& outputfile, TrialInfo i, bool charlotte);
+
+TrialInfo interpolateBlinks(ifstream& trialInfoFile, ifstream& eyetrackingFile, ofstream& outputfile, 
+			    TrialInfo trialSet, Dataline preBlinK, Interpdata interpolation, bool charlotte);
+size_t interpolateShortBlinks(ofstream& outputfile, TrialInfo trialSet, Dataline preBlinK, 
+				 Dataline postBlinK, size_t lines2interp, bool charlotte);
+bool interpolateLongBlinks(ofstream& outputfile, TrialInfo trialSet, Interpdata interpolation, 
+				bool charlotte);
+
+int getFixationsFromSentenceOnset(ifstream& trialInfoFile);
+
+size_t getMeanPsizeBeforeStim(ifstream& trialInfoFile, string filename);
+size_t getMeanPsizeBeforeStim(ifstream& trialInfoFile, string filename, size_t interval4baseline);
+
+
+size_t averageFirst200(string filename);
+string baselineAndUpdate(vector<double> xpos, vector<double> ypos, vector<double> psize, 
+			  ifstream& subInfoFile, string subID, ofstream& outputfile);
+
+double vectorMean(vector<double> values);
+
+//size_t binData(string filename);
+size_t binData(string filename, string dir2save);
+
+size_t extractPupil(ifstream& trialInfoFile, string filename);
+
+size_t export1SecFromHere(ifstream& trialInfoFile, TrialInfo trialSet, string line, ifstream& eyetrackingFile, 
+			     ofstream& outputfile, vector<double> tVect, vector<double> pVect);
+
+size_t writeOut(Dataline eye, ofstream& outputfile, TrialInfo trialSet);
+
+size_t allAtOnce(bool charlotte, string filename);
+size_t selectProcessing(int narg, char **nameArgs);

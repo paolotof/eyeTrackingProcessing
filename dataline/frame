@@ -1,0 +1,5 @@
+#include "dataline.ih"
+
+Dataline::
+{
+}
