@@ -1,6 +1,16 @@
 [Dolphin]
+<<<<<<< HEAD
 HeaderColumnWidths=470,68,132,127
 Timestamp=2016,1,28,9,18,26
 Version=3
 ViewMode=1
 VisibleRoles=CustomizedDetails,Details_text,Details_size,Details_date,Details_type
+=======
+HeaderColumnWidths=340,73,130,85,172
+SortOrder=1
+SortRole=date
+Timestamp=2015,4,20,14,7,5
+Version=3
+ViewMode=1
+VisibleRoles=Details_text,Details_size,Details_date,Details_permissions,Details_type,CustomizedDetails
+>>>>>>> f8f41d1f9d904c6c1e018802a9ec018841f4dfc7
