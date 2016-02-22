@@ -81,3 +81,6 @@ size_t writeOut(Dataline eye, ofstream& outputfile, TrialInfo trialSet);
 
 size_t allAtOnce(bool charlotte, string filename);
 size_t selectProcessing(int narg, char **nameArgs);
+
+size_t average200BeforeVisualOnset(string filename);
+size_t exportBaseline(vector<double> xpos, vector<double> ypos, vector<double> psize, string subID, string trialNum, ofstream& outputfile);

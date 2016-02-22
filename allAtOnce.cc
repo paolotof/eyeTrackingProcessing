@@ -24,7 +24,7 @@ size_t allAtOnce(bool charlotte, string filename)
   else
   {
     cout << "Exporting\n\n";
-    size_t interval4baseline = 200;
+    size_t interval4baseline = 1000;
     // add baseline length to the filename 
     outputfile.append("_");
     outputfile += std::to_string(interval4baseline);

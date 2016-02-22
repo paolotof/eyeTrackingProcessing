@@ -40,65 +40,65 @@ size_t getMeanPsizeBeforeStim(ifstream& trialInfoFile, string filename)
       
       while (getline(eyetrackingFile, line))
       {
-	eye.extractData(line);
+				eye.extractData(line);
 
-	if ((not eye.isMSG() == true) && eye.isValid()) 
-	{
-	  tVect.push_back(eye.g_time());
-	  pVect.push_back(eye.g_psize());
-	  
-	  if (tVect.size() >= nlines)
-	  {
-	    tVect.erase(tVect.begin());
-	    pVect.erase(pVect.begin());
-	  }
-	}
-	
-	
-	if (line.find("onsetVisualStim") != string::npos) // because of the delay it might happen that for the first subject onset of sound file is too late already.
-	{
-	  trialSet.setCurrentTr(trialSet.g_currentTr() + 1);
-	  // average the values subtracting by the number of lines
-	  if (trialSet.g_currentTr() == trialSet.g_trialIN())
-	  {
-	    outputfile << trialSet.g_subject() << '\t' 
-	      << trialSet.g_condition()  << '\t' 
-	      << trialSet.g_target() << '\t' 
-	      << trialSet.g_trialIN() << '\t' 
-	      << trialSet.g_subCond() << '\t' 
-	      << static_cast<size_t>(vectorMean(tVect)) << '\t'
-	      << static_cast<size_t>(vectorMean(pVect)) << '\n';
-	  }
+				if ((not eye.isMSG() == true) && eye.isValid()) 
+				{
+					tVect.push_back(eye.g_time());
+					pVect.push_back(eye.g_psize());
+					
+					if (tVect.size() >= nlines)
+					{
+						tVect.erase(tVect.begin());
+						pVect.erase(pVect.begin());
+					}
+				}
+				
+				
+				if (line.find("onsetVisualStim") != string::npos) // because of the delay it might happen that for the first subject onset of sound file is too late already.
+				{
+					trialSet.setCurrentTr(trialSet.g_currentTr() + 1);
+					// average the values subtracting by the number of lines
+					if (trialSet.g_currentTr() == trialSet.g_trialIN())
+					{
+						outputfile << trialSet.g_subject() << '\t' 
+							<< trialSet.g_condition()  << '\t' 
+							<< trialSet.g_target() << '\t' 
+							<< trialSet.g_trialIN() << '\t' 
+							<< trialSet.g_subCond() << '\t' 
+							<< static_cast<size_t>(vectorMean(tVect)) << '\t'
+							<< static_cast<size_t>(vectorMean(pVect)) << '\n';
+					}
 
-	  // reset vector  
-	  vector<double>().swap(tVect);
-	  vector<double>().swap(pVect);
-	  
-	  while (getline(eyetrackingFile, line)) // sample next lines until end of the trial
-	  {
-	    if (line.find("TRIAL ENDS") != string::npos)
-	    {
-	      if (trialSet.g_currentTr() == trialSet.g_trialIN()) 
-		trialSet.resetAndUpdate(trialInfoFile);
-	      break;
-	    }
-	  }
-	  
-	}
-	
-	if (eyetrackingFile.eof())
-	  break;
-      }
-    }
-    eyetrackingFile.close();
-    trialSet.setCurrentTr(0);
-    cout << " processed \n";
-    subNum = trialSet.g_subject();  
-        
-    if (trialInfoFile.eof())
-      break;
-    
-  }
+					// reset vector  
+					vector<double>().swap(tVect);
+					vector<double>().swap(pVect);
+					
+					while (getline(eyetrackingFile, line)) // sample next lines until end of the trial
+					{
+						if (line.find("TRIAL ENDS") != string::npos)
+						{
+							if (trialSet.g_currentTr() == trialSet.g_trialIN()) 
+					trialSet.resetAndUpdate(trialInfoFile);
+							break;
+						}
+					}
+					
+				}
+				
+				if (eyetrackingFile.eof())
+					break;
+						}
+					}
+					eyetrackingFile.close();
+					trialSet.setCurrentTr(0);
+					cout << " processed \n";
+					subNum = trialSet.g_subject();  
+							
+					if (trialInfoFile.eof())
+						break;
+					
+				}
   
   trialInfoFile.close();
   outputfile.close();
