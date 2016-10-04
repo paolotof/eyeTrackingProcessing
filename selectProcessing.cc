@@ -1,66 +1,71 @@
 #include "main.ih"
 
-size_t selectProcessing(int narg, char **nameArgs)
+size_t selectProcessing(int narg, char **nameArgs, string outputfile, size_t timeBefore)
 {
 	if (narg < 3)
 	{
-		cout << "The programs runs with 3 arguments:\n" 
+		cout << "The programs runs with at least 3 arguments:\n" 
 		<< "1) program name, \n"
 		<< "2) text file (trials2beIncluded_noFillers.txt)\n"
 		<< "3) time interval for baseline (600 ms)\n"
-		<< "(e.g. ./binary trials2beIncluded_noFillers.txt 600)\n";
+		<< "(4 | default: 200) time interval to start data export\n"
+		<< "(5 | default: not) use Charlotte ROI definition?\n"
+		<< "(e.g. ./binary trials2beIncluded_noFillers.txt 600)\n"
+		<< "(OR   ./binary trials2beIncluded_noFillers.txt 600 charlotte)\n"
+		<< "(OR   ./binary trials2beIncluded_noFillers.txt 600 200)\n"
+		<< "(OR   ./binary trials2beIncluded_noFillers.txt 600 200 charlotte)\n";
 		return 0;
 	}
 	
-	// chose analysis type
-  cout << "Choose report type:\n"
-    "  1 - TARGET fixations\n"
-    "  2 - Fixations from sentence onset\n"
-    "  3 - BLINKS report\n"
-    "  4 - Exclude trials with too long blinks \n"
-    "  5 - NORMAL EXPORT\n"
-    "  6 - BINNING export\n"
-    "  7 - extract pupil size data -500:1500 ms of Stimulus Onset\n"
-    "  8 - Average Baseline Before Each Sound-Target Onset\n"
-		"  9 - Average Baseline first 200 ms before Visual Onset 1st Trial\n"
-		" 10 - exit\n"
-    " 11 - 4, 5, 6, 8, and 9 together \n"
-		" 12 - Average Baseline first 200 ms before Each Visual Onset\n"
-		"> ";      
+// analysis INPUTS for processing		
+// 1 - assign trials2beIncluded
+	string trials2beIncludedFile = nameArgs[1];
 	
-	size_t reportType;
-	cin >> reportType;
-	
-	bool charlotte; 
-	narg == 4 ? charlotte = true  : charlotte = false;    
-	
-	string filename = nameArgs[1];
-	cout << filename << '\n';
-	istringstream ss(nameArgs[2]);
-	
+// 2 - assign baseline interval
+	istringstream baselineInputValue(nameArgs[2]);
 	size_t interval4baseline;
-	if (!(ss >> interval4baseline))
-		cerr << "Invalid number " << nameArgs[2] << '\n';
-	
-	string outputfile = "tbt_";
-	string dir2save = "/home/paolot/results/tmpTestsAnita/";
-	dir2save = "";
-	//outputfile.insert(outputfile.begin(), dir2save);
-	outputfile.insert(0, dir2save);
-	filename.insert(0, dir2save);
-	
-	if (filename.find("noFillers") != string::npos)
+	if (!(baselineInputValue >> interval4baseline))
+		cerr << "The values entered for baseline should be size_t data-type" << nameArgs[2] << '\n';
+// 3 &| 4	
+	bool charlotte; 
+	narg == 5 ? charlotte = true  : charlotte = false;    
+	if (narg > 3)
+	{
+		istringstream intPreTarget(nameArgs[4]);
+		if (!(intPreTarget >> timeBefore)) // then it's a string
+		{
+			cout << "assuming data should be processed with ROI of Charlotte\n";
+			charlotte = true;
+		}
+	} // if narg > 3
+	if (trials2beIncludedFile.find("noFillers") != string::npos)
 		outputfile.append("noFillers");
 	else
 		outputfile.append("withFillers");
-		
-	cout << outputfile << '\n';
 	
-	ifstream trialInfoFile(filename);
+	ifstream trialInfoFile(trials2beIncludedFile);
 	if (!trialInfoFile.is_open())
-		cout << "Unable to open "<< filename << '\n';
+		cout << "Unable to open "<< trials2beIncludedFile << '\n';
 	else
 	{
+		// chose analysis type
+		cout << "Choose report type:\n"
+		"  1 - TARGET fixations\n"
+		"  2 - Fixations from sentence onset\n"
+		"  3 - BLINKS report\n"
+		"  4 - Exclude trials with too long blinks \n"
+		"  5 - NORMAL EXPORT\n"
+		"  6 - BINNING export\n"
+		"  7 - extract pupil size data -500:1500 ms of Stimulus Onset\n"
+		"  9 - Average Baseline first 200 ms before Visual Onset 1st Trial\n"
+		" 10 - exit\n"
+		" 11 - 4, 5, 6, 8, and 9 together \n"
+		" 12 - Average Baseline first 200 ms before Each Visual Onset\n"
+		"> ";      
+//		"  8 - Average Baseline Before Each Sound-Target Onset\n" // this is not implemented yet
+		
+		size_t reportType;
+		cin >> reportType;
 		switch (reportType) 
 		{
 			case 1:
@@ -78,25 +83,25 @@ size_t selectProcessing(int narg, char **nameArgs)
 			case 3:
 			{
 				cout << "BLINKS REPORT\n\n";
-				checkBlinks(trialInfoFile, 0, filename);
+				checkBlinks(trialInfoFile, 0, trials2beIncludedFile);
 				break;
 			} 
 			case 4:
 			{
 				cout << "Exclude trials with too long blinks \n\n";
-				checkBlinksAndGetInterpBounds(trialInfoFile, 1, filename, dir2save);
-			break;
+				checkBlinksAndGetInterpBounds(trialInfoFile, 1, trials2beIncludedFile, outputfile);
+			  break;
 			}
 			case 5:
 			{
 				cout << "EXPORTING\n\n";
-				processData(trialInfoFile, outputfile, charlotte, dir2save, interval4baseline);
+				processData(trialInfoFile, outputfile, charlotte, timeBefore);
 				break;
 			}
 			case 6:
 			{
 				cout << "BINNING\n\n";
-				binData(outputfile, dir2save);
+				binData(outputfile);
 				break;
 			}
 			case 7:
@@ -107,14 +112,14 @@ size_t selectProcessing(int narg, char **nameArgs)
 			}
 			case 8:
 			{	  
-				cout << "Average Baseline Before Each Sound-target Onset\n\n";
-				getMeanPsizeBeforeStim(trialInfoFile, outputfile);
+				cout << "Baseline Before Visual Stimulus Onset Every Trial\n\n";
+				average200BeforeVisualOnset(outputfile, interval4baseline);
 				break;
 			} 
 			case 9:
 			{
 				cout << "Baseline Before Visual Stimulus Onset 1st trial ONLY\n\n";
-				averageFirst200(outputfile);
+				averageFirst200(outputfile, interval4baseline);
 				break;
 			}
 			case 10:
@@ -126,32 +131,33 @@ size_t selectProcessing(int narg, char **nameArgs)
 			{
 				cout << "All processing in a row!!!\n\n";
 				cout << "Exclude trials with too long blinks \n\n";
-				checkBlinksAndGetInterpBounds(trialInfoFile, 1, filename, dir2save);
-				filename.replace(filename.find(".txt"), 4, "_noBlinks.txt");
-				ifstream updatedTrialInfoFile(filename);
+				checkBlinksAndGetInterpBounds(trialInfoFile, 1, trials2beIncludedFile, outputfile);
+				trials2beIncludedFile.replace(trials2beIncludedFile.find(".txt"), 4, "_noBlinks.txt");
+				ifstream updatedTrialInfoFile(trials2beIncludedFile);
 				if (not updatedTrialInfoFile.is_open())
-					cout << "Unable to open "<< filename << '\n';
+					cout << "Unable to open "<< trials2beIncludedFile << '\n';
 				else
 				{
 					cout << "EXPORTING\n\n";
-					processData(updatedTrialInfoFile, outputfile, charlotte, dir2save, interval4baseline);
+					// add baseline length to the trials2beIncludedFile 
+					outputfile.append("_");
+					outputfile += std::to_string(timeBefore);
+					processData(updatedTrialInfoFile, outputfile, charlotte, timeBefore);
 					cout << "BINNING\n\n";
-					binData(outputfile, dir2save);
-					cout << "Average Baseline Before Stimulus Onset\n\n";
-					if (not updatedTrialInfoFile.is_open())
-						updatedTrialInfoFile.open(filename, ifstream::in);
-					getMeanPsizeBeforeStim(updatedTrialInfoFile, outputfile);
-					cout << "Baseline Before Visual Stimulus Onset\n\n";
-					averageFirst200(outputfile);
+					binData(outputfile);
+					cout << "Baseline Before Visual Stimulus Onset 1st trial ONLY\n\n";
+					averageFirst200(outputfile, interval4baseline);
+					cout << "Baseline Before Visual Stimulus Onset Every Trial\n\n";
+					average200BeforeVisualOnset(outputfile, interval4baseline);
 				}
 				break;
 			}
-			case 12:
-			{
-				cout << "Baseline Before Visual Stimulus Onset Every Trial\n\n";
-				average200BeforeVisualOnset(outputfile);
-				break;
-			}
+// 			case 12:
+// 			{
+// 				cout << "Baseline Before Visual Stimulus Onset Every Trial\n\n";
+// 				average200BeforeVisualOnset(outputfile, interval4baseline);
+// 				break;
+// 			}
 			default:
 			{
 				cout << "Unknown option\n\n";

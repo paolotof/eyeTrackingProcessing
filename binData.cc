@@ -1,12 +1,13 @@
 #include "main.ih"
 
-size_t binData(string filename, string dir2save)
+size_t binData(string filename)
 {
   string tmp = filename;
   tmp.append("_ALL_medianInterp.asc");
-//  ifstream datafile(tmp.insert(0, dir2save));
   ifstream datafile(tmp);
   
+	cout << "BINNING\n";
+	
 //   cout << tmp << ' ' << filename << '\n';
   
   if (! datafile.is_open())
@@ -83,11 +84,11 @@ size_t binData(string filename, string dir2save)
     {
 //       << clockTime 
       binnedData << currentPp << '\t' << vectorMean(tVect) << '\t' 
-	<< vectorMean(bVect) << '\t' << condition << '\t' 
-	<< currentTr  << '\t' << item << '\t' << exp  << '\t' 
-	<< vectorMean(pVect) << '\t' << vectorMean(targV) << '\t' 
-	<< vectorMean(compV) << '\t' << vectorMean(dOneV) << '\t' 
-	<< vectorMean(dTwoV) << '\t' << vectorMean(fixV) << '\n';
+				<< vectorMean(bVect) << '\t' << condition << '\t' 
+				<< currentTr  << '\t' << item << '\t' << exp  << '\t' 
+				<< vectorMean(pVect) << '\t' << vectorMean(targV) << '\t' 
+				<< vectorMean(compV) << '\t' << vectorMean(dOneV) << '\t' 
+				<< vectorMean(dTwoV) << '\t' << vectorMean(fixV) << '\n';
 	
       vector<double>().swap(tVect);
       vector<double>().swap(bVect);

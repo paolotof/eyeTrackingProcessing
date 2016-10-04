@@ -71,9 +71,9 @@ TrialInfo interpolateBlinks(ifstream& trialInfoFile, ifstream& eyetrackingFile, 
     {
       trialSet.updateInterp(interpolateLongBlinks(outputfile, trialSet, interpolation, charlotte));
       if (interpolation.iBegin() < trialSet.g_targetOnset())
-	trialSet.updateBinCount((interpolation.iEnd() - trialSet.g_targetOnset()) / 4);
+				trialSet.updateBinCount((interpolation.iEnd() - trialSet.g_targetOnset()) / 4);
       else
-	trialSet.updateBinCount((interpolation.iEnd() - interpolation.iBegin()) / 4);
+				trialSet.updateBinCount((interpolation.iEnd() - interpolation.iBegin()) / 4);
     }
   }
   // short blink		  

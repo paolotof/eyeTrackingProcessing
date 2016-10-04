@@ -1,22 +1,28 @@
 #include "main.ih"
 
-size_t average200BeforeVisualOnset(string filename)
+size_t average200BeforeVisualOnset(string filename, size_t interval4baseline)
 {
-  ifstream subInfoFile("subnames.txt");
-  
+	// noFillers or withFillers are irrelevant for this analysis.
+// 	if (filename.find("noFillers") != string::npos)
+// 		filename.replace(filename.find("_noFillers.txt"), 14, ".txt");
+// 	else
+// 		filename.replace(filename.find("_withFillers.txt"), 16, ".txt");
+	
+	// read file with subject to include
+	ifstream subInfoFile("subnames.txt");
   if (!subInfoFile.is_open())
     cout << "Unable to open subnames.txt\n";
   else
   { 
     ofstream outputfile;
-    filename.append("_average200_BeforeVisualOnset.asc");
-    outputfile.open(filename);
+//     filename.append("average200_BeforeVisualOnset.asc");
+		string otherBitFilename = "average" + to_string(interval4baseline) + "_BeforeVisualOnset.asc";
+		filename.append(otherBitFilename);
+		outputfile.open(filename);
 		outputfile << "pp" << '\t'  << "tr" << '\t'  << "x" << '\t' << "y" << '\t' << "psize"  << '\n';  
     
     string subID;
-    getline(subInfoFile, subID);
-    
-    while (true)
+    while (getline(subInfoFile, subID))
     {
       ifstream eyetrackingFile(subID);
       if (! eyetrackingFile.is_open())
@@ -27,13 +33,13 @@ size_t average200BeforeVisualOnset(string filename)
       else
       {
 				Dataline eye;
-				string line;
 				
 				vector<double> xpos;
 				vector<double> ypos;
 				vector<double> psize;
 				
 				cout << subID << ' ';
+				string line;
 				while (getline(eyetrackingFile, line))
 				{
 					/* ignore lines which are fix or sac messages */
@@ -65,7 +71,7 @@ size_t average200BeforeVisualOnset(string filename)
 // 					if (eye.isMSG() == false)
 					if (eye.isValid() == true)
 					{
-						size_t lines2include = 50; // 200 ms is 50 lines each sampled every 4 seconds
+						size_t lines2include = interval4baseline / 4;// 50; // 200 ms is 50 lines each sampled every 4 seconds
 						if (xpos.size() >= lines2include)
 						{
 							xpos.push_back(eye.g_xpos());
@@ -85,13 +91,8 @@ size_t average200BeforeVisualOnset(string filename)
 				} // end of "while(getline(eyetrackingFile, line))"
 				
 				eyetrackingFile.close();
-				getline(subInfoFile, subID); // update subject counter
 				cout << " processed \n";
       } // end "if(! eyetrackingFile.is_open()") 
-      
-      if (subInfoFile.eof())
-				break;
-      
     } // end "while(getline(subInfoFile, subID))"
     
     subInfoFile.close();

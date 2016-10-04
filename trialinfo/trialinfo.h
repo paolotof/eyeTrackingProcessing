@@ -10,7 +10,7 @@ using namespace std;
 class TrialInfo
 {
   string d_subject;
-  size_t d_trialIN;
+  size_t d_trialIN;	 
   size_t d_currentTr = 0;  
   string d_targetLoc;
   string d_competLoc;
@@ -25,8 +25,8 @@ class TrialInfo
   size_t d_iBin;
   size_t d_binCount = 0;
   size_t d_fixCount = 1; // always starts with 1 and then update
-  bool d_updateInterp; 
-  size_t d_limit4extraction = 2000;
+  bool d_updateInterp = false; // 26-4-16: given a default so that it is valid if running people without interpolation 
+  size_t d_limit4extraction = 4000; // we could make this to be either a number or a string as i.e. (TRIAL ENDS)
   size_t d_timeIsUp;
   
   public:

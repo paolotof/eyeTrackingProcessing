@@ -11,8 +11,8 @@ Interpdata Interpdata::extractInterpData(string& lineBegin, string& lineEnd)
   firstLine >> sub >> ntrial >> ibeg >> xBeg >> yBeg >> pBeg;
 
   Interpdata data;
-  sub.erase(sub.end()-4,sub.end()); 
-  data.setSub(sub); // remove '.asc' from file name
+  sub.erase(sub.end()-4,sub.end()); // remove '.asc' from file name
+  data.setSub(sub); 
   data.setNtrial(ntrial);
   data.setBegin(ibeg);
   data.setBegX(xBeg);
@@ -31,5 +31,6 @@ Interpdata Interpdata::extractInterpData(string& lineBegin, string& lineEnd)
   data.setEndP(pEnd);
   data.setLines2interp(lines2interp);
   // ps:check if numbers make sense!
+	// cout << 
   return data;
 }

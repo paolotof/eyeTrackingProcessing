@@ -23,13 +23,16 @@ size_t AssignAreaAndWriteOut(double (*dataArray), ofstream& outputfile, TrialInf
     << '\t' << timeDif
     << '\t' << trialSet.totalBins()
     << '\t' << trialSet.g_condition() 
-    << '\t' << trialSet.g_trialIN() << '\t' << trialSet.g_target() 
-    << '\t' << trialSet.g_subCond() << '\t' << dataArray[3] << '\t' 
-    << propFix2ROIs[0] << '\t' 
-    << propFix2ROIs[1] << '\t' 
-    << propFix2ROIs[2] << '\t' 
-    << propFix2ROIs[3] << '\t' 
-    << trialSet.g_Fix() << '\n';
+    << '\t' << trialSet.g_trialIN() 
+		<< '\t' << trialSet.g_target() 
+    << '\t' << trialSet.g_subCond() 
+		<< '\t' << dataArray[3] 
+		<< '\t' << propFix2ROIs[0] 
+		<< '\t' << propFix2ROIs[1] 
+		<< '\t' << propFix2ROIs[2] 
+    << '\t' << propFix2ROIs[3] 
+    << '\t' << trialSet.g_Fix() 
+		<< '\n';
       
       
     /*

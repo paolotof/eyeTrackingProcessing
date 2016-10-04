@@ -4,6 +4,9 @@
 #include <sstream> // to use isstringstream functionality
 #include <vector>
 #include <iomanip> // to keep the format of numbers right
+// for fork
+#include <unistd.h>
+#include <sys/wait.h>
 //#include <new>  // for operator new[]
 
 namespace Icmbuild
@@ -24,63 +27,54 @@ using namespace std;
 
 // below here goes the function which use the class
 
-void usage(string const &progname);
+// void usage(string const &progname);
 
 Dataline extractData(string& line);
 // Dataline (*pExtractData)(string& line) = extractData;
 
 /* functions modifying the data */
 
+size_t allAtOnce(bool charlotte, string filename, string outputfile, size_t timeBefore);
+size_t AssignAreaAndWriteOut(double (*dataArray), ofstream& outputfile, TrialInfo i, bool charlotte);
+size_t average200BeforeVisualOnset(string filename, size_t baselineInt);
+size_t averageFirst200(string filename, size_t baselineInt);
+
+string baselineAndUpdate(vector<double> xpos, vector<double> ypos, vector<double> psize, ifstream& subInfoFile, string subID, ofstream& outputfile);
+size_t binData(string filename);
+
+string checkBlinks(ifstream& trialInfoFile, size_t reportType, string filename);
+string checkBlinksAndGetInterpBounds(ifstream& trialInfoFile, size_t reportType, string filename, string nameOutputfile);
+int checkTargetFixations(ifstream& trialInfoFile);
 char classifyXpos(double xpos, bool charlotte);
 char classifyYpos(double ypos, bool charlotte);
 size_t classifyArea(double xpos, double ypos, const string& pos2match, size_t posID, bool charlotte);
 
-size_t processData(ifstream& trialInfoFile, string filename, bool charlotte, string dir2save, size_t timeBefore);
-
-double linearInterpolate(double y1, double y2, double mu);
-double sum(double v[], size_t n);
-double mean(double v[], size_t n);
-double vectorMedian(vector<double> dataArray); 
-
-int checkTargetFixations(ifstream& trialInfoFile);
-
-string checkBlinks(ifstream& trialInfoFile, size_t reportType, string filename);
-string checkBlinksAndGetInterpBounds(ifstream& trialInfoFile, size_t reportType, string filename,
-				     string dir2save);
-
-size_t AssignAreaAndWriteOut(double (*dataArray), ofstream& outputfile, TrialInfo i, bool charlotte);
-
-TrialInfo interpolateBlinks(ifstream& trialInfoFile, ifstream& eyetrackingFile, ofstream& outputfile, 
-			    TrialInfo trialSet, Dataline preBlinK, Interpdata interpolation, bool charlotte);
-size_t interpolateShortBlinks(ofstream& outputfile, TrialInfo trialSet, Dataline preBlinK, 
-				 Dataline postBlinK, size_t lines2interp, bool charlotte);
-bool interpolateLongBlinks(ofstream& outputfile, TrialInfo trialSet, Interpdata interpolation, 
-				bool charlotte);
+size_t export1SecFromHere(ifstream& trialInfoFile, TrialInfo trialSet, string line, ifstream& eyetrackingFile, ofstream& outputfile, vector<double> tVect, vector<double> pVect);
+size_t exportBaseline(vector<double> xpos, vector<double> ypos, vector<double> psize, string subID, string trialNum, ofstream& outputfile);
+size_t extractPupil(ifstream& trialInfoFile, string filename);
 
 int getFixationsFromSentenceOnset(ifstream& trialInfoFile);
 
-size_t getMeanPsizeBeforeStim(ifstream& trialInfoFile, string filename);
-size_t getMeanPsizeBeforeStim(ifstream& trialInfoFile, string filename, size_t interval4baseline);
+TrialInfo interpolateBlinks(ifstream& trialInfoFile, ifstream& eyetrackingFile, ofstream& outputfile, TrialInfo trialSet, Dataline preBlinK, Interpdata interpolation, bool charlotte);
 
+size_t interpolateShortBlinks(ofstream& outputfile, TrialInfo trialSet, Dataline preBlinK, Dataline postBlinK, size_t lines2interp, bool charlotte);
 
-size_t averageFirst200(string filename);
-string baselineAndUpdate(vector<double> xpos, vector<double> ypos, vector<double> psize, 
-			  ifstream& subInfoFile, string subID, ofstream& outputfile);
+bool interpolateLongBlinks(ofstream& outputfile, TrialInfo trialSet, Interpdata interpolation, bool charlotte);
 
+double linearInterpolate(double y1, double y2, double mu);
+double mean(double v[], size_t n);
+
+size_t processData(ifstream& trialInfoFile, string filename, bool charlotte, size_t timeBefore);
+
+size_t selectProcessing(int narg, char **nameArgs, string outputfile, size_t timeBefore);
+double sum(double v[], size_t n);
+
+double vectorMedian(vector<double> dataArray); 
 double vectorMean(vector<double> values);
-
-//size_t binData(string filename);
-size_t binData(string filename, string dir2save);
-
-size_t extractPupil(ifstream& trialInfoFile, string filename);
-
-size_t export1SecFromHere(ifstream& trialInfoFile, TrialInfo trialSet, string line, ifstream& eyetrackingFile, 
-			     ofstream& outputfile, vector<double> tVect, vector<double> pVect);
 
 size_t writeOut(Dataline eye, ofstream& outputfile, TrialInfo trialSet);
 
-size_t allAtOnce(bool charlotte, string filename);
-size_t selectProcessing(int narg, char **nameArgs);
 
-size_t average200BeforeVisualOnset(string filename);
-size_t exportBaseline(vector<double> xpos, vector<double> ypos, vector<double> psize, string subID, string trialNum, ofstream& outputfile);
+
+
+

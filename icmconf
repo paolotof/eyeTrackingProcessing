@@ -71,6 +71,9 @@
 // The pattern locating sources in a directory:
 #define SOURCES "*.cc"
 // Directory below this directory to contain temporary results
+//#define TMP_DIR "/mnt/disk2/Data/eyetrackingData/anita/ROSA/eyetracker/tmp"
+// paol8 it is better to leave tmp here and move only the binary with the 
+// bash script
 #define TMP_DIR "tmp"
 // Uncomment to use the ALL facility and a class dependency setup in the
 // CLASSES file. When a directory contains a file ALL (optionally rename
