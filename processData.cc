@@ -22,9 +22,9 @@ size_t processData(ifstream& trialInfoFile, string filename, bool charlotte, siz
   
   string interpolationFile;
   if (filename.find("noFillers") != string::npos)
-    interpolationFile = "noFillers";
+    interpolationFile = "tbt_noFillers";
   else
-    interpolationFile = "withFillers";
+		interpolationFile = "tbt_withFillers";
 	
 	
   interpolationFile.append("_blinksPerSubjectSmaller300.txt"); 

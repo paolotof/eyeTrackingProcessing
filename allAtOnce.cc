@@ -32,6 +32,7 @@ size_t allAtOnce(bool charlotte, string trial2beIncluded, string outputfile, siz
     // add baseline length to the trial2beIncluded 
     outputfile.append("_");
 		outputfile += std::to_string(timeBefore);
+// 		cout << outputfile <<'\n';
 		processData(updatedTrialInfoFile, outputfile, charlotte, timeBefore);
 //     cout << "Binning\n\n";
     binData(outputfile);
