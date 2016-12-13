@@ -8,6 +8,7 @@
 #include <unistd.h>
 #include <sys/wait.h>
 //#include <new>  // for operator new[]
+#include <cmath> // for round in binTimeInterval
 
 namespace Icmbuild
 {
@@ -74,6 +75,7 @@ double vectorMean(vector<double> values);
 
 size_t writeOut(Dataline eye, ofstream& outputfile, TrialInfo trialSet);
 
+size_t binTimeInterval(string filename, size_t timeInterval);
 
 
 

@@ -15,12 +15,13 @@
 int main(int argc, char **argv)
 try
 {
-// 	string dir2save = "/mnt/disk2/Data/testFolder/Anita/eyetracker/";
-// 	string outputfile = dir2save + "test_";
+//  	string dir2save = "/mnt/disk2/Data/testFolder/Anita/eyetracker/";
 	string dir2save = "";
+// 	string outputfile = dir2save + "test_";
 	string outputfile = dir2save + "tbt_";
 	size_t timeBefore = 1000;
-	size_t baselineInt = 200;
+// 	size_t baselineInt = 200;
+	
 	if (argc > 2)
 		selectProcessing(argc, argv, outputfile, timeBefore);
   else
@@ -43,12 +44,12 @@ try
 			case 0: /* child */
 			{
 				cout << "CHILD n " << indexOfProcess << ' ';
-				allAtOnce(charlotte, "trials2beIncluded_noFillers.txt", outputfile, timeBefore);
-				// this needs to be done only once, not for both
-				cout << "Baseline Before Visual Stimulus Onset 1st trial ONLY\n\n";
-				averageFirst200(outputfile, baselineInt);
+// 				allAtOnce(charlotte, "trials2beIncluded_noFillers.txt", outputfile, timeBefore);
+// 				// this needs to be done only once, not for both
+// 				cout << "Baseline Before Visual Stimulus Onset 1st trial ONLY\n\n";
+// 				averageFirst200(outputfile, baselineInt);
 				indexOfProcess++;
-				exit(0);
+// 				exit(0);
 			}
 			case -1:
 			{
@@ -60,8 +61,8 @@ try
 				cout << "PARENT n " << indexOfProcess << ' ';
 				allAtOnce(charlotte, "trials2beIncluded_withFillers.txt", outputfile, timeBefore);
 				// this needs to be done only once, not for both
-				cout << "Baseline Before Visual Stimulus Onset Every Trial\n\n";
-				average200BeforeVisualOnset(outputfile, baselineInt);
+// 				cout << "Baseline Before Visual Stimulus Onset Every Trial\n\n";
+// 				average200BeforeVisualOnset(outputfile, baselineInt);
 				indexOfProcess++;
 			}
 		}  // switch(pid)
