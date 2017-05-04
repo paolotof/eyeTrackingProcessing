@@ -10,12 +10,13 @@ void TrialInfo::extractInfo(string& line)
 
   size_t Trial, TargetStarts, RTtime;
   
-  linedata >> Subject >> Trial >> TargetLoc >> CompetLoc >> Dist1Loc >>
-    Dist2Loc >> Target >> Condition >> TargetStarts >> RTtime >> SubCond; 
+  linedata >> Subject >> Trial >> TargetLoc >> CompetLoc >>
+		Dist1Loc >> Dist2Loc >> Target >> Condition >> 
+		TargetStarts >> RTtime >> SubCond; 
       
+//   cout << Trial << ' ' << TrialInfo::g_trialIN() << " extract info ";
   TrialInfo::setSubject(Subject);
   TrialInfo::setTrialIN(Trial);
-//   cout << Trial << ' ' << TrialInfo::g_trialIN() << " extract info ";
   TrialInfo::setTargetLoc(TargetLoc);
   TrialInfo::setCompetLoc(CompetLoc);
   TrialInfo::setDist1Loc(Dist1Loc);

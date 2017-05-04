@@ -11,7 +11,9 @@ void TrialInfo::computeTargetLimits(string& line)
 //  size_t timeBefore = 400;
   
   //  TrialInfo::setOnsetTarget(sentenceStarts + TrialInfo::g_targetStarts() + timeBefore); 
-  TrialInfo::setOnsetTarget(sentenceStarts + TrialInfo::g_targetStarts()); 
+  TrialInfo::setOnsetTarget(sentenceStarts + 
+		TrialInfo::g_targetStarts()
+	); 
   TrialInfo::setTimeIsUp();
   
 //   return(trialSet);

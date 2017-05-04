@@ -13,7 +13,8 @@ size_t selectProcessing(int narg, char **nameArgs, string outputfile, size_t tim
 		<< "(e.g. ./binary trials2beIncluded_noFillers.txt 600)\n"
 		<< "(OR   ./binary trials2beIncluded_noFillers.txt 600 charlotte)\n"
 		<< "(OR   ./binary trials2beIncluded_noFillers.txt 600 200)\n"
-		<< "(OR   ./binary trials2beIncluded_noFillers.txt 600 200 charlotte)\n";
+		<< "(OR   ./binary trials2beIncluded_noFillers.txt 600 200 charlotte)\n"
+		<< "(OR   ./binary trials2beIncluded_noFillers.txt 200 1000 charlotte)\n";
 		return 0;
 	}
 	
@@ -31,12 +32,14 @@ size_t selectProcessing(int narg, char **nameArgs, string outputfile, size_t tim
 	narg == 5 ? charlotte = true  : charlotte = false;    
 	if (narg > 3)
 	{
-		istringstream intPreTarget(nameArgs[4]);
+// 		cout << nameArgs[3] << '\n';
+		istringstream intPreTarget(nameArgs[3]);
 		if (!(intPreTarget >> timeBefore)) // then it's a string
 		{
 			cout << "assuming data should be processed with ROI of Charlotte\n";
 			charlotte = true;
 		}
+// 		cout << timeBefore << '\n';
 	} // if narg > 3
 	if (trials2beIncludedFile.find("noFillers") != string::npos)
 		outputfile.append("noFillers");
@@ -48,6 +51,9 @@ size_t selectProcessing(int narg, char **nameArgs, string outputfile, size_t tim
 		cout << "Unable to open "<< trials2beIncludedFile << '\n';
 	else
 	{
+// 		cout << timeBefore << '\n';
+		outputfile.append("_");
+		outputfile += std::to_string(timeBefore);
 		// chose analysis type
 		cout << "Choose report type:\n"
 		"  1 - TARGET fixations\n"

@@ -18,28 +18,20 @@
  */
 
 //bool checkBlinksAndGetInterpBounds(ifstream& trialInfoFile, size_t reportType, string filename, string dir2save)
-string checkBlinksAndGetInterpBounds(ifstream& trialInfoFile, size_t reportType, string filename, string nameOutputfile)
+string checkBlinksAndGetInterpBounds(ifstream& trialInfoFile, size_t reportType, 
+																		 string filename, string nameOutputfile)
 {
-	// this work, but changing it would require too many changes later
-	
-	// get rid of repetitions on filename
-// 	if (filename.find("noFillers") != string::npos)
-// 		filename.replace(filename.find("_noFillers.txt"), 14, ".txt");
-// 	else
-// 		filename.replace(filename.find("_withFillers.txt"), 16, ".txt");
-		
-	
 	// create new file name
   filename.replace(filename.find(".txt"), 4, "_noBlinks.txt");
-// 	filename = nameOutputfile + '_' + filename;
   // file containing blinks longer than 300 ms
   ofstream longBlinksReport;
   longBlinksReport.open(nameOutputfile.append("_blinksPerSubject.txt")); 
 	
 	// file containing blinks shorter than 300 ms
   ofstream shortBlinksReport;
-  shortBlinksReport.open(nameOutputfile.replace(nameOutputfile.find(".txt"), 4,
-    "Smaller300.txt"));  
+  shortBlinksReport.open(
+		nameOutputfile.replace(nameOutputfile.find(".txt"), 4, "Smaller300.txt")
+	);  
 	
   // file containing trials to be included without blinks
   ofstream updatedTrialInfoFile;
@@ -66,13 +58,11 @@ string checkBlinksAndGetInterpBounds(ifstream& trialInfoFile, size_t reportType,
       vector<double> xVect;
       vector<double> yVect;
       vector<double> pVect;
-      
       size_t lines2include = 25;
       double medianT;
       double medianX;
       double medianY;
       double medianP;
-             
       string line;
       Dataline eye;
       //size_t onsetWord = 0;
@@ -85,7 +75,10 @@ string checkBlinksAndGetInterpBounds(ifstream& trialInfoFile, size_t reportType,
 					trialSet.updateCurrentTrial(line);
 
 			// TRIAL ENDS - update trial information/reset arrays
-				if ((line.find("TRIAL ENDS") != string::npos) && (trialSet.g_currentTr() == trialSet.g_trialIN()))
+				if (
+					(line.find("TRIAL ENDS") != string::npos) && 
+					(trialSet.g_currentTr() == trialSet.g_trialIN())
+				)
 				{
 					if (reportType == 1)
 					{
@@ -100,7 +93,7 @@ string checkBlinksAndGetInterpBounds(ifstream& trialInfoFile, size_t reportType,
 					// considered anymore stop with this file and get to the next one
 					if (subNum.substr(0, subNum.find(".asc")) != trialSet.g_subject())
 					{
-// 						cout << '\n' << subNum << " processing ends at trial " << trialSet.g_currentTr() << '\n';
+// 		cout << '\n' << subNum << " processing ends at trial " << trialSet.g_currentTr() << '\n';
 // 						cout << " trials=" << trialSet.g_currentTr() << '\n';
 						eyetrackingFile.close();
 						break;
@@ -110,11 +103,14 @@ string checkBlinksAndGetInterpBounds(ifstream& trialInfoFile, size_t reportType,
 					vector<double>().swap(xVect);
 					vector<double>().swap(yVect);
 					vector<double>().swap(pVect);
-					
 				} // if ((line.find("TRIAL ENDS") != string::npos) && (trialSet.g_currentTr() == trialSet.g_trialIN()))
 
 			// BLINK STARTS - get median of previously stored values
-				if ((line.find("SBLINK") != string::npos) && (trialSet.g_currentTr() == trialSet.g_trialIN()))
+			// Error the sblink and eblink contains the onset of the target, but the trial is not interpolated
+				if (
+					(line.find("SBLINK") != string::npos) && 
+					(trialSet.g_currentTr() == trialSet.g_trialIN())
+				)
 				{
 					medianT = vectorMedian(tVect);
 					medianX = vectorMedian(xVect);
@@ -127,22 +123,27 @@ string checkBlinksAndGetInterpBounds(ifstream& trialInfoFile, size_t reportType,
 					vector<double>().swap(pVect);
 				}
 			// BLINK ENDS	
-				if ((line.find("EBLINK") != string::npos) && (trialSet.g_currentTr() == trialSet.g_trialIN()))
+				if (
+					(line.find("EBLINK") != string::npos) && 
+					(trialSet.g_currentTr() == trialSet.g_trialIN())
+				)
 				{
 					istringstream linedata(line); // extract time information from the datafile
 					string msgType, side;
 					double blinkBegin, blinkEnd;
 					linedata >> msgType >> side >> blinkBegin >> blinkEnd;
-					
-				
 					// 1) Does blink happens while target word is played?
-					// if it 1.a) does not - ignore, 
-					//       1.b) does - check the length of the blink from onset of target word. 
-					if ((blinkEnd >= trialSet.g_targetOnset()) && (blinkBegin <= trialSet.timeIsUp()))
+					//  1.a) NOT - ignore, 
+					//  1.b) YES - check the length of the blink from onset of target word. 
+					if (
+						(blinkEnd >= trialSet.g_targetOnset()) && 
+						(blinkBegin <= trialSet.timeIsUp())
+					)
 					{
 						
 						blinkDuration = blinkEnd - blinkBegin;
-						
+						// recompute the duration of the blink if the
+						// blink lasts longer then the trial end or start before the onset of the target
 						if (blinkEnd >= trialSet.timeIsUp())
 							blinkDuration = trialSet.timeIsUp() - blinkBegin;
 						if (blinkBegin <= trialSet.g_targetOnset())
@@ -153,99 +154,116 @@ string checkBlinksAndGetInterpBounds(ifstream& trialInfoFile, size_t reportType,
 						
 						bool exportData;
 						if (reportType == 0)
-							longBlinksReport << subNum << ' ' << trialSet.g_currentTr() << ' ' << blinkDuration << '\n';
+							longBlinksReport << subNum << ' ' << trialSet.g_currentTr() 
+								<< ' ' << blinkDuration << '\n';
 						else
 						{
 // 							cout << ' ' << trialSet.g_currentTr(); //<< ' ' << blinkDuration ;
 							if (blinkDuration < 300)
 							{
 								includeTrial = true;
-								// do nothing for blinks smaller than 20 ms!
-								// Extrapolate data for the interpolation using median values 
-// 								if (blinkDuration < 20)
-// 								{
-// // 									cout << '+';
-// 									cout << ' ';
-// 								}
-// 								else
-								if (blinkDuration > 20)	
+								exportData = true;
+								// get other 25 lines of data to get the median of post blink
+								for (size_t lines2skip = 0; lines2skip < lines2include; lines2skip++) 
 								{
-// 									cout << '.'; // add a dot to filename for each blink needing interpolation with median
-									exportData = true;
-									// get other 25 lines of data to get the median of
-									for (size_t lines2skip = 0; lines2skip < lines2include; lines2skip++) 
+									getline(eyetrackingFile, line);
+									if (line.find("TRIAL ENDS") != string::npos)
 									{
-										getline(eyetrackingFile, line);
-										if (line.find("TRIAL ENDS") != string::npos)
-										{
-											// interrupt all extrapolation for current blink
-											vector<double>().swap(tVect);
-											vector<double>().swap(xVect);
-											vector<double>().swap(yVect);
-											vector<double>().swap(pVect);
-											// do all the operation for 'trials2beIncluded' file update, since other blinks 
-											// in this current trial should be included
-											updatedTrialInfoFile << trialInfo << '\n';
-											getline(trialInfoFile, trialInfo); 
-											trialSet.extractInfo(trialInfo);
-											exportData = false; // interrupt interpolation for this specific blink
-											
-											/* this creates problem because _blinksPerSubjectSmaller300 has different trials
-											*  then trials2beIncluded_x_noBlinks file. Therefore it's preferable to read the 
-											*  whole eyetracking file
-											*/
-											if (subNum.substr(0, subNum.find(".asc")) != trialSet.g_subject())
-											{
-// 												cout << '\n' << subNum << " processing ends at trial " << trialSet.g_currentTr() << '\n';
-												eyetrackingFile.close();
-												break;
-											} // if (subNum.substr(0, subNum.find(".asc")) != trialSet.g_subject())
-											break; // breaks the for loop
-										} // if (line.find("TRIAL ENDS") != string::npos)
-										
-										if (line.find("SBLINK") != string::npos) // in case a blink happens before 25 lines
-										{
-											// fish a new line and break
-											getline(eyetrackingFile, line);
-											exportData = false;
-											break;
-										} //if (line.find("SBLINK") != string::npos)
-										
-										eye.extractData(line);
-										if (not eye.isMSG() && eye.isValid())
-										{
-											tVect.push_back(eye.g_time());
-											xVect.push_back(eye.g_xpos());
-											yVect.push_back(eye.g_ypos());
-											pVect.push_back(eye.g_psize());
-										} // if (not eye.isMSG() && eye.isValid())
-									} // for (size_t lines2skip = 0; lines2skip < lines2include; lines2skip++) 
-									// for loop to collect data after end of the blink
-									
-									if (exportData) // Export data only if 'TRIAL ENDS' message wasn't encountered
-									{
-										// begin interpolation
-										shortBlinksReport << subNum << ' ' << trialSet.g_currentTr() << ' '; 
-										size_t old_precision = shortBlinksReport.precision();
-										shortBlinksReport.precision(10);
-										shortBlinksReport << medianT ;
-										shortBlinksReport.precision(old_precision);
-										shortBlinksReport << ' ' << medianX << ' ' << medianY << ' ' << medianP << '\n';
-										// end interpolation
-										shortBlinksReport << subNum << ' ' << trialSet.g_currentTr() << ' ';
-										shortBlinksReport.precision(10);
-										shortBlinksReport << vectorMedian(tVect); 
-										shortBlinksReport.precision(old_precision);
-										shortBlinksReport << ' ' << vectorMedian(xVect) 
-											<< ' ' << vectorMedian(yVect)  << ' ' << vectorMedian(pVect)  
-											<< ' ' << blinkDuration / 4 << '\n'; // this last line represents the lines to interpolate
-										// ? why divided by 4?
+										// interrupt all extrapolation for current blink
 										vector<double>().swap(tVect);
 										vector<double>().swap(xVect);
 										vector<double>().swap(yVect);
 										vector<double>().swap(pVect);
-									} // end if (exportData) 
-								} // end if-else (blinkDuration < 20)
+										// do all the operation for 'trials2beIncluded' file update, since other blinks 
+										// in this current trial should be included
+										updatedTrialInfoFile << trialInfo << '\n';
+										getline(trialInfoFile, trialInfo); 
+										trialSet.extractInfo(trialInfo);
+										exportData = false; // interrupt interpolation for this specific blink
+										
+										/* this creates problem because _blinksPerSubjectSmaller300 has different trials
+										*  then trials2beIncluded_x_noBlinks file. Therefore it's preferable to read the 
+										*  whole eyetracking file
+										*/
+										if (subNum.substr(0, subNum.find(".asc")) != trialSet.g_subject())
+										{
+// 												cout << '\n' << subNum << " processing ends at trial " << trialSet.g_currentTr() << '\n';
+											eyetrackingFile.close();
+											break;
+										} // if (subNum.substr(0, subNum.find(".asc")) != trialSet.g_subject())
+										break; // breaks the for loop
+									} // if (line.find("TRIAL ENDS") != string::npos)
+									// in case another blink happens before 25 lines
+									if (line.find("SBLINK") != string::npos) 
+									{
+										// export what you have up to here if you have more than one line!
+										if (tVect.size() > 1){
+											shortBlinksReport << subNum << ' ' << trialSet.g_currentTr() << ' '; 
+											size_t old_precision = shortBlinksReport.precision();
+											shortBlinksReport.precision(10);
+											shortBlinksReport << medianT ;
+											shortBlinksReport.precision(old_precision);
+											shortBlinksReport << ' ' << medianX << ' ' << medianY << ' ' << medianP << '\n';
+											// end interpolation
+											shortBlinksReport << subNum << ' ' << trialSet.g_currentTr() << ' ';
+											shortBlinksReport.precision(10);
+											shortBlinksReport << vectorMedian(tVect); 
+											shortBlinksReport.precision(old_precision);
+											shortBlinksReport << ' ' << vectorMedian(xVect) 
+												<< ' ' << vectorMedian(yVect)  << ' ' << vectorMedian(pVect)  
+												<< ' ' << blinkDuration / 4 << '\n'; // this last line represents the lines to interpolate
+										}
+										// update the line for the new interpolation
+										medianT = vectorMedian(tVect);
+										medianX = vectorMedian(xVect);
+										medianY = vectorMedian(yVect);
+										medianP = vectorMedian(pVect);
+										// reset vector 
+										vector<double>().swap(tVect);
+										vector<double>().swap(xVect);
+										vector<double>().swap(yVect);
+										vector<double>().swap(pVect);
+										// fish a new line and break the loop
+										getline(eyetrackingFile, line);
+										exportData = false; // why false?
+										break;
+									} //if (line.find("SBLINK") != string::npos)
+									// update array with data for postblink interpolation
+									eye.extractData(line);
+									if (not eye.isMSG() && eye.isValid())
+									{
+										tVect.push_back(eye.g_time());
+										xVect.push_back(eye.g_xpos());
+										yVect.push_back(eye.g_ypos());
+										pVect.push_back(eye.g_psize());
+									} // if (not eye.isMSG() && eye.isValid())
+								} // for (size_t lines2skip = 0; lines2skip < lines2include; lines2skip++) 
+								// for loop to collect data after end of the blink
+								
+								if (exportData) // Export data only if 'TRIAL ENDS' message wasn't encountered
+								{
+									// begin interpolation
+									shortBlinksReport << subNum << ' ' << trialSet.g_currentTr() << ' '; 
+									size_t old_precision = shortBlinksReport.precision();
+									shortBlinksReport.precision(10);
+									shortBlinksReport << medianT ;
+									shortBlinksReport.precision(old_precision);
+									shortBlinksReport << ' ' << medianX << ' ' << medianY << ' ' << medianP << '\n';
+									// end interpolation
+									shortBlinksReport << subNum << ' ' << trialSet.g_currentTr() << ' ';
+									shortBlinksReport.precision(10);
+									shortBlinksReport << vectorMedian(tVect); 
+									shortBlinksReport.precision(old_precision);
+									shortBlinksReport << ' ' << vectorMedian(xVect) 
+										<< ' ' << vectorMedian(yVect)  << ' ' << vectorMedian(pVect)  
+										<< ' ' << blinkDuration / 4 << '\n'; // this last line represents the lines to interpolate
+									// ? why divided by 4?
+									vector<double>().swap(tVect);
+									vector<double>().swap(xVect);
+									vector<double>().swap(yVect);
+									vector<double>().swap(pVect);
+								} // end if (exportData) 
+// 							} // end if-else (blinkDuration < 20)
 							} // end if-else (blinkDuration > 300)	    
 							else
 							{

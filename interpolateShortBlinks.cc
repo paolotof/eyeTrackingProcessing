@@ -6,7 +6,7 @@ size_t interpolateShortBlinks(ofstream& outputfile, TrialInfo trialSet, Dataline
 				 Dataline postBlink, size_t lines2interp, bool charlotte)
 {
   
-//   cout << "S";
+  cout << "S";
   // interpolate
   double dataArray[4] = {0, 0, 0, 0};
   for (double iter = (lines2interp - 1); iter >= 0; iter--)

@@ -8,7 +8,7 @@
 #include <unistd.h>
 #include <sys/wait.h>
 //#include <new>  // for operator new[]
-#include <cmath> // for round in binTimeInterval
+#include <cmath> // for round in binTimeInterval, and floor in interpolation
 
 namespace Icmbuild
 {
@@ -42,6 +42,7 @@ size_t averageFirst200(string filename, size_t baselineInt);
 
 string baselineAndUpdate(vector<double> xpos, vector<double> ypos, vector<double> psize, ifstream& subInfoFile, string subID, ofstream& outputfile);
 size_t binData(string filename);
+size_t binData(string filename, size_t lines2bin);
 
 string checkBlinks(ifstream& trialInfoFile, size_t reportType, string filename);
 string checkBlinksAndGetInterpBounds(ifstream& trialInfoFile, size_t reportType, string filename, string nameOutputfile);
@@ -56,18 +57,17 @@ size_t extractPupil(ifstream& trialInfoFile, string filename);
 
 int getFixationsFromSentenceOnset(ifstream& trialInfoFile);
 
-TrialInfo interpolateBlinks(ifstream& trialInfoFile, ifstream& eyetrackingFile, ofstream& outputfile, TrialInfo trialSet, Dataline preBlinK, Interpdata interpolation, bool charlotte);
+TrialInfo interpolateBlinks(ifstream& trialInfoFile, ifstream& eyetrackingFile, ofstream& outputfile, TrialInfo trialSet, Dataline preBlinK, Interpdata interpolation, bool charlotte, size_t timeBefore);
 
 size_t interpolateShortBlinks(ofstream& outputfile, TrialInfo trialSet, Dataline preBlinK, Dataline postBlinK, size_t lines2interp, bool charlotte);
 
-bool interpolateLongBlinks(ofstream& outputfile, TrialInfo trialSet, Interpdata interpolation, bool charlotte);
+bool interpolateLongBlinks(ofstream& outputfile, TrialInfo trialSet, Interpdata interpolation, bool charlotte, size_t timeBefore);
 
 double linearInterpolate(double y1, double y2, double mu);
 double mean(double v[], size_t n);
 
-size_t processData(ifstream& trialInfoFile, string filename, bool charlotte, size_t timeBefore);
+size_t processData(string& trial2beIncluded, string filename, bool charlotte, size_t timeBefore);
 
-size_t selectProcessing(int narg, char **nameArgs, string outputfile, size_t timeBefore);
 double sum(double v[], size_t n);
 
 double vectorMedian(vector<double> dataArray); 
@@ -76,7 +76,14 @@ double vectorMean(vector<double> values);
 size_t writeOut(Dataline eye, ofstream& outputfile, TrialInfo trialSet);
 
 size_t binTimeInterval(string filename, size_t timeInterval);
+// void ERDD_withBase1And2(string& outputfileName, size_t timeBefore);
+void ERDD_withBase123(string& outputfileName, size_t timeBefore);
+double findMatchingBaseline(string& pp, size_t trial, ifstream& baselineFile);
+double findMatchingPp(string& pp, ifstream& baselineFile);
 
+size_t baselineBeforeTarget(string filename, string& eye2read, size_t interval4baseline);
+
+string eliminateRedundantTrials(string& trial2beIncluded, string& interpolationFile);
 
 
 

@@ -25,8 +25,8 @@ class TrialInfo
   size_t d_iBin;
   size_t d_binCount = 0;
   size_t d_fixCount = 1; // always starts with 1 and then update
-  bool d_updateInterp = false; // 26-4-16: given a default so that it is valid if running people without interpolation 
-  size_t d_limit4extraction = 4000; // we could make this to be either a number or a string as i.e. (TRIAL ENDS)
+  bool d_updateInterp = false; // 26-4-16: assigned a default so that it is valid if running people without interpolation 
+  size_t d_limit4extraction = 4000; // this values is never used, only kept for backward compatibility
   size_t d_timeIsUp;
   
   public:

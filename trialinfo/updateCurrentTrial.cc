@@ -10,6 +10,6 @@ void TrialInfo::updateCurrentTrial(string& line)
   
   TrialInfo::setFix(1);
   
-//  cout << TrialInfo::g_currentTr() << ' ';
-//  return(TrialInfo);
+// 	cout << TrialInfo::g_currentTr() << ' ' << TrialInfo::g_subject() << ' ';
+//  return(TrialInfo);subject
 }
