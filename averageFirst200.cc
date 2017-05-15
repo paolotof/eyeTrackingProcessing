@@ -46,20 +46,18 @@ size_t averageFirst200(string filename, size_t interval4baseline)
 						exportBaseline(xpos, ypos, psize, subID, "1", outputfile);
 						eyetrackingFile.close();
 						cout << " processed \n";
-						
 						vector<double>().swap(xpos);
 						vector<double>().swap(ypos);
 						vector<double>().swap(psize);
-						
 						break;
 					}
 						
 					eye.extractData(line);
-					
 // 					if (eye.isMSG() == false)
 					if (eye.isValid() == true)
 					{
-			// 	    size_t lines2include = 100; // 200 ms is 50 lines each sampled every 4 seconds
+						// 	    size_t lines2include = 100; // this is the baseline we were using with Charlotte in the data in the folder AnalysisBefore09052017
+						// 200 ms is 50 lines each sampled every 4 seconds
 						size_t lines2include = interval4baseline / 4; // 200 ms is 50 lines each sampled every 4 seconds
 						if (xpos.size() >= lines2include)
 						{
@@ -80,8 +78,6 @@ size_t averageFirst200(string filename, size_t interval4baseline)
 				} // end of "while(getline(eyetrackingFile, line))"
       } // end "if(! eyetrackingFile.is_open()") 
     } // end "while(getline(subInfoFile, subID))"
-    
-
     subInfoFile.close();
     outputfile.close();
   }

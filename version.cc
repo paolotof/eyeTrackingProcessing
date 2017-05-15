@@ -8,15 +8,15 @@
 #endif
 
 #ifndef AUTHOR
-#define AUTHOR ""
+#define AUTHOR "PAOLO TOFFANIN"
 #endif
 
 #ifndef VERSION
-#define VERSION "0.00.00"
+#define VERSION "5.15.02"
 #endif
 
 #ifndef YEARS
-#define YEARS "2012"
+#define YEARS "2017"
 #endif
 
 namespace Icmbuild

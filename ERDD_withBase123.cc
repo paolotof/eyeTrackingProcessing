@@ -16,32 +16,10 @@ void ERDD_withBase123(string& outputfileName, size_t timeBefore)
 		cout << file << " does not exist\n"; 
 		return;
 	} 
-	ifstream baseline1File("RT_averageBeforeTarget200.asc");
-	if (not baseline1File.is_open())
-	{
-		cout << "RT_averageBeforeTarget200.asc does not exist\n"; 
-		return;
-	}
-	ifstream baseline2File("RT_averageFirst200.asc");
-	if (not baseline2File.is_open())
-	{
-		cout << "RT_averageFirst200.asc does not exist\n"; 
-		return;
-	}
-	ifstream baseline3File("RT_average200_BeforeVisualOnset.asc");
-	if (not baseline3File.is_open())
-	{
-		cout << "RT_average200_BeforeVisualOnset.asc does not exist\n"; 
-		return;
-	}	
 //	
 	cout << "Compute baselines one, two and three\n";
 	string line;
-// read and SKIP the files' headers
-	getline(processedFile, line);
-	getline(baseline1File, line);
-	getline(baseline2File, line);
-	getline(baseline3File, line);
+	getline(processedFile, line);// read and SKIP the files' headers
 	
 	ofstream outputfile;
 	outputfile.open(outputfileName);
@@ -59,11 +37,11 @@ void ERDD_withBase123(string& outputfileName, size_t timeBefore)
 	float psize, fix, target, competitor, d1, d2;
 	// all the values below are initiliazed to remove the warning: 
 	// 	`b1_psize' may be used uninitialized in this function
-		size_t oldTrial = 1;
-		string oldPp = "";
-		double b1_psize = 0;	
-		double b2_psize = 0;	
-		double b3_psize = 0;
+	size_t oldTrial = 1;
+	string oldPp = "";
+	double b1_psize = 0;	
+	double b2_psize = 0;	
+	double b3_psize = 0;
 	
 // loop
 	while (getline(processedFile, line))
@@ -75,13 +53,12 @@ void ERDD_withBase123(string& outputfileName, size_t timeBefore)
 		// update baselines when eyetracking file goes from one trial to the next
 		if (oldTrial != trial)
 		{
-			b1_psize = findMatchingBaseline(pp, trial, baseline1File);
-			b3_psize = findMatchingBaseline(pp, trial, baseline3File);
-		}
+			b1_psize = matchBaselines(pp, trial, "RT_averageBeforeTarget200.asc");
+			b3_psize = matchBaselines(pp, trial, "RT_average200_BeforeVisualOnset.asc");
+		}														
 		oldTrial = trial; // synchronizing to  eyetracking file
-		
 		if (oldPp != pp)
-			b2_psize = findMatchingPp(pp, baseline2File);
+			b2_psize = matchBaselines(pp, 1, "RT_averageFirst200.asc");
 		oldPp = pp; // updating eyetracking file
 		
 		outputfile << pp  << '\t' << time  << '\t' << condition  
@@ -94,8 +71,5 @@ void ERDD_withBase123(string& outputfileName, size_t timeBefore)
 	
 	outputfile.close();
 	processedFile.close();
-	baseline3File.close();
-	baseline2File.close();
-	baseline1File.close();
 	return;
 }

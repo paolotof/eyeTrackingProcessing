@@ -78,8 +78,10 @@ size_t writeOut(Dataline eye, ofstream& outputfile, TrialInfo trialSet);
 size_t binTimeInterval(string filename, size_t timeInterval);
 // void ERDD_withBase1And2(string& outputfileName, size_t timeBefore);
 void ERDD_withBase123(string& outputfileName, size_t timeBefore);
-double findMatchingBaseline(string& pp, size_t trial, ifstream& baselineFile);
-double findMatchingPp(string& pp, ifstream& baselineFile);
+// double findMatchingBaseline(string& pp, size_t trial, ifstream& baselineFile);
+// double findMatchingPp(string& pp, ifstream& baselineFile);
+double matchBaselines(string& pp, size_t trial, string baseline2read);
+
 
 size_t baselineBeforeTarget(string filename, string& eye2read, size_t interval4baseline);
 
