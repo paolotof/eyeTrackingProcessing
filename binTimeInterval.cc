@@ -37,7 +37,7 @@ size_t binTimeInterval(string filename, size_t timeInterval)
   
   vector<double> tVect;
 	vector<double> newBin;
-	vector<double> bVect;
+// 	vector<double> bVect;
   vector<double> pVect;
   vector<double> targV;
   vector<double> compV;
@@ -58,10 +58,12 @@ size_t binTimeInterval(string filename, size_t timeInterval)
   {
     istringstream linedata(dataline); // extract time information from the eyetracking file
     string currentPp, condition, item, exp;
-    size_t clockTime, bin, currentTr;
-    int time; // time can also be negative, but it will always be an integer
+// 		size_t clockTime, bin, currentTr;
+		size_t clockTime, currentTr;
+		int time; // time can also be negative, but it will always be an integer
     double psize, target, competitor, d1, d2, fix;
-    linedata >> currentPp >> clockTime >> time >> bin >> condition >> currentTr >> 
+// 		linedata >> currentPp >> clockTime >> time >> bin >> condition >> currentTr >> 
+		linedata >> currentPp >> clockTime >> time >> condition >> currentTr >> 
       item >> exp >> psize >> target >> competitor >> d1 >> d2 >> fix;
     
     
@@ -70,7 +72,7 @@ size_t binTimeInterval(string filename, size_t timeInterval)
     {
       vector<double>().swap(tVect);
 			vector<double>().swap(newBin);
-      vector<double>().swap(bVect);
+//       vector<double>().swap(bVect);
       vector<double>().swap(pVect);
       vector<double>().swap(targV);
       vector<double>().swap(compV);
@@ -83,7 +85,7 @@ size_t binTimeInterval(string filename, size_t timeInterval)
     // this must be done afterwards otherwise all the values of the first timepoint
     // are flushed instead of stored. 
     tVect.push_back(time);
-    bVect.push_back(bin);
+//     bVect.push_back(bin);
 		double binNew = round(time/4);
 		newBin.push_back(binNew);
     pVect.push_back(psize);
@@ -108,7 +110,8 @@ size_t binTimeInterval(string filename, size_t timeInterval)
 //       << clockTime 
 // 			binnedFrames = tVect.size(); // add a line at the end to know on how many lines the average for the binning is based
       binnedData << currentPp << '\t' << vectorMean(tVect) << '\t' 
-				<< vectorMean(bVect) << '\t'  << round(vectorMean(newBin)) << '\t' 
+// 				<< vectorMean(bVect) << '\t'  
+				<< round(vectorMean(newBin)) << '\t' 
 				<< condition << '\t' 
 				<< currentTr  << '\t' << item << '\t' << exp  << '\t' 
 				<< vectorMean(pVect) << '\t' << vectorMean(targV) << '\t' 
@@ -117,7 +120,7 @@ size_t binTimeInterval(string filename, size_t timeInterval)
 				<< tVect.size() << '\n'; // binnedFrames
 	
       vector<double>().swap(tVect);
-      vector<double>().swap(bVect);
+//       vector<double>().swap(bVect);
 			vector<double>().swap(newBin);
       vector<double>().swap(pVect);
       vector<double>().swap(targV);

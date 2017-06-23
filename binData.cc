@@ -32,7 +32,6 @@ size_t binData(string filename)
 //   cout << tmp << '\n';
   
   vector<double> tVect;
-  vector<double> bVect;
   vector<double> pVect;
   vector<double> targV;
   vector<double> compV;
@@ -48,18 +47,17 @@ size_t binData(string filename)
   {
     istringstream linedata(dataline); // extract time information from the eyetracking file
     string currentPp, condition, item, exp;
-    size_t clockTime, bin, currentTr;
+    size_t clockTime, currentTr;
     int time; // time can also be negative, but it will always be an integer
     double psize, target, competitor, d1, d2, fix;
-    linedata >> currentPp >> clockTime >> time >> bin >> condition >> currentTr >> 
-      item >> exp >> psize >> target >> competitor >> d1 >> d2 >> fix;
-    
+    linedata >> currentPp >> clockTime >> time >> condition 
+			>> currentTr >> item >> exp >> psize >> target >> competitor 
+			>> d1 >> d2 >> fix;
     
     // reset everything  
     if ((previousPp != currentPp) || (previousTr != currentTr))
     {
       vector<double>().swap(tVect);
-      vector<double>().swap(bVect);
       vector<double>().swap(pVect);
       vector<double>().swap(targV);
       vector<double>().swap(compV);
@@ -71,7 +69,6 @@ size_t binData(string filename)
     // this must be done afterwards otherwise all the values of the first timepoint
     // are flushed instead of stored. 
     tVect.push_back(time);
-    bVect.push_back(bin);
     pVect.push_back(psize);
     targV.push_back(target);
     compV.push_back(competitor);
@@ -84,14 +81,13 @@ size_t binData(string filename)
     {
 //       << clockTime 
       binnedData << currentPp << '\t' << vectorMean(tVect) << '\t' 
-				<< vectorMean(bVect) << '\t' << condition << '\t' 
+				<< condition << '\t' 
 				<< currentTr  << '\t' << item << '\t' << exp  << '\t' 
 				<< vectorMean(pVect) << '\t' << vectorMean(targV) << '\t' 
 				<< vectorMean(compV) << '\t' << vectorMean(dOneV) << '\t' 
 				<< vectorMean(dTwoV) << '\t' << vectorMean(fixV) << '\n';
 	
       vector<double>().swap(tVect);
-      vector<double>().swap(bVect);
       vector<double>().swap(pVect);
       vector<double>().swap(targV);
       vector<double>().swap(compV);

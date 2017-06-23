@@ -26,47 +26,55 @@ using namespace std;
 #include "trialinfo/trialinfo.h"
 #include "interpdata/interpdata.h"
 
-// below here goes the function which use the class
-
-// void usage(string const &progname);
+void usage(string const &progname);
 
 Dataline extractData(string& line);
 // Dataline (*pExtractData)(string& line) = extractData;
 
 /* functions modifying the data */
 
-size_t allAtOnce(bool charlotte, string filename, string outputfile, size_t timeBefore);
-size_t AssignAreaAndWriteOut(double (*dataArray), ofstream& outputfile, TrialInfo i, bool charlotte);
-size_t average200BeforeVisualOnset(string filename, size_t baselineInt);
-size_t averageFirst200(string filename, size_t baselineInt);
+// size_t allAtOnce(bool charlotte, string filename, string outputfile, size_t timeBefore);
+size_t AssignAreaAndWriteOut(double (*dataArray), ofstream& outputfile, 
+														 TrialInfo i, bool charlotte);
+size_t average200BeforeVisualOnset(string filename, size_t baselineInt, bool print2screen);
+size_t averageFirst200(string filename, size_t baselineInt, bool print2screen);
 
-string baselineAndUpdate(vector<double> xpos, vector<double> ypos, vector<double> psize, ifstream& subInfoFile, string subID, ofstream& outputfile);
+string baselineAndUpdate(vector<double> xpos, vector<double> ypos, vector<double> psize,
+												 ifstream& subInfoFile, string subID, ofstream& outputfile);
 size_t binData(string filename);
 size_t binData(string filename, size_t lines2bin);
 
-string checkBlinks(ifstream& trialInfoFile, size_t reportType, string filename);
-string checkBlinksAndGetInterpBounds(ifstream& trialInfoFile, size_t reportType, string filename, string nameOutputfile);
-int checkTargetFixations(ifstream& trialInfoFile);
+string checkBlinksAndGetInterpBounds(string filename, 
+																		 string nameOutputfile, bool print2screen, 
+																		 size_t timeBefore);
 char classifyXpos(double xpos, bool charlotte);
 char classifyYpos(double ypos, bool charlotte);
-size_t classifyArea(double xpos, double ypos, const string& pos2match, size_t posID, bool charlotte);
+size_t classifyArea(double xpos, double ypos, const string& pos2match, 
+										size_t posID, bool charlotte);
 
-size_t export1SecFromHere(ifstream& trialInfoFile, TrialInfo trialSet, string line, ifstream& eyetrackingFile, ofstream& outputfile, vector<double> tVect, vector<double> pVect);
-size_t exportBaseline(vector<double> xpos, vector<double> ypos, vector<double> psize, string subID, string trialNum, ofstream& outputfile);
+size_t export1SecFromHere(ifstream& trialInfoFile, TrialInfo trialSet, string line, 
+													ifstream& eyetrackingFile, ofstream& outputfile, 
+													vector<double> tVect, vector<double> pVect);
+size_t exportBaseline(vector<double> xpos, vector<double> ypos, vector<double> psize, 
+											string subID, string trialNum, ofstream& outputfile);
 size_t extractPupil(ifstream& trialInfoFile, string filename);
 
 int getFixationsFromSentenceOnset(ifstream& trialInfoFile);
 
-TrialInfo interpolateBlinks(ifstream& trialInfoFile, ifstream& eyetrackingFile, ofstream& outputfile, TrialInfo trialSet, Dataline preBlinK, Interpdata interpolation, bool charlotte, size_t timeBefore);
+TrialInfo interpolateBlinks(ifstream& trialInfoFile, ifstream& eyetrackingFile, 
+														ofstream& outputfile, TrialInfo trialSet, 
+														Dataline preBlinK, Interpdata interpolation, 
+														bool print2screen, bool charlotte, size_t timeBefore);
 
-size_t interpolateShortBlinks(ofstream& outputfile, TrialInfo trialSet, Dataline preBlinK, Dataline postBlinK, size_t lines2interp, bool charlotte);
-
-bool interpolateLongBlinks(ofstream& outputfile, TrialInfo trialSet, Interpdata interpolation, bool charlotte, size_t timeBefore);
+bool interpolateLongBlinks(ofstream& outputfile, TrialInfo trialSet, 
+													 Interpdata interpolation, bool charlotte);
 
 double linearInterpolate(double y1, double y2, double mu);
 double mean(double v[], size_t n);
 
-size_t processData(string& trial2beIncluded, string filename, bool charlotte, size_t timeBefore);
+size_t processData(string& trial2beIncluded, string filename, 
+									 bool charlotte, size_t timeBefore, bool print2screen, 
+									 string filePrefix);
 
 double sum(double v[], size_t n);
 
@@ -76,16 +84,25 @@ double vectorMean(vector<double> values);
 size_t writeOut(Dataline eye, ofstream& outputfile, TrialInfo trialSet);
 
 size_t binTimeInterval(string filename, size_t timeInterval);
-// void ERDD_withBase1And2(string& outputfileName, size_t timeBefore);
 void ERDD_withBase123(string& outputfileName, size_t timeBefore);
-// double findMatchingBaseline(string& pp, size_t trial, ifstream& baselineFile);
-// double findMatchingPp(string& pp, ifstream& baselineFile);
 double matchBaselines(string& pp, size_t trial, string baseline2read);
 
 
-size_t baselineBeforeTarget(string filename, string& eye2read, size_t interval4baseline);
+size_t baselineBeforeTarget(string filename, string& eye2read, 
+														size_t interval4baseline);
 
 string eliminateRedundantTrials(string& trial2beIncluded, string& interpolationFile);
 
+// Interpdata interpolationInterval(string& interpolationFile, TrialInfo trialSet, Dataline eye);
 
+struct median_t {
+	double time;
+	double x;
+	double y;
+	double psize;
+};
 
+void exportInterpolation(ofstream& shortBlinksReport, TrialInfo trialSet, 
+												 median_t medv, median_t medAfter);
+
+void checkInterpolations(string fillersNoFillers);

@@ -3,11 +3,12 @@
 // TrialInfo interpolateLongBlinks(ofstream& outputfile, TrialInfo trialSet, Interpdata interpolation, bool charlotte)
 // size_t interpolateLongBlinks(ofstream& outputfile, TrialInfo trialSet, Interpdata interpolation, bool charlotte)
 bool interpolateLongBlinks(ofstream& outputfile, TrialInfo trialSet, 
-													 Interpdata interpolation, bool charlotte, size_t timeBefore)
+													 Interpdata interpolation, bool charlotte)
 {
   
-// 	cout << "L" << trialSet.g_subject() << ' ' << trialSet.g_currentTr() << '\n';
-	cout << "L";
+// 	cout << "\nL " << trialSet.g_subject() << ' ' << trialSet.g_currentTr() << '\n';
+	// 	cout << "L";
+	cout << ".";
 	bool updateInterp = false;
   // interpolate
 	size_t lines2interp = ceil((interpolation.iEnd() - interpolation.iBegin()) / 4);
@@ -15,7 +16,7 @@ bool interpolateLongBlinks(ofstream& outputfile, TrialInfo trialSet,
 // 	size_t lines2interp = (interpolation.iEnd() - interpolation.iBegin()) / 4;
 	double dataArray[4] = {0, 0, 0, 0};
 	for (double iter = lines2interp; iter > 0; --iter)
-// 	for (size_t iter = lines2interp; iter > 0; --iter)
+	// 	for (size_t iter = lines2interp; iter > 0; --iter)
 	{
     dataArray[0] = linearInterpolate(interpolation.iEnd(), interpolation.iBegin(), 
 				     iter/lines2interp);
@@ -26,11 +27,12 @@ bool interpolateLongBlinks(ofstream& outputfile, TrialInfo trialSet,
     dataArray[3] = linearInterpolate(interpolation.endP(), interpolation.begP(), 
 				     iter/lines2interp);
 //     size_t timeBefore = 400;
-    if (
-			(dataArray[0] >= (trialSet.g_targetOnset() - timeBefore)) && 
-			(dataArray[0] <= trialSet.timeIsUp())
-		)
-    { // time of interest boundaries
+//     if (
+// 			(dataArray[0] >= (trialSet.g_targetOnset() - timeBefore)) && 
+// 			(dataArray[0] <= trialSet.timeIsUp())
+// 		)
+		if (dataArray[0] >= trialSet.startExport()) { 
+			// time of interest boundaries
 			trialSet.addOneBin();
 			AssignAreaAndWriteOut(dataArray, outputfile, trialSet, charlotte);
 			updateInterp = true;

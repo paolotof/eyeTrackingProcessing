@@ -1,0 +1,16 @@
+s29B1	7629110	2940	n_t_a	49	schilder	B	294	1	0	0	0	9
+s29B2	7919664	293494	c_t_a	13	kameel	B	332	1	0	0	0	1
+
+s29B2 10 7919810 1137.9 487.8 345 37
+Extracting no  s29B2.asc 
+trial 3 ENDS before enough postblink data gathered
+
+trial 7 STARTS before enough postblink data gathered
+
+s29B2 10 7920750 974.4 239.4 335 42
+
+some trials do not get interpolated
+
+s29B2	7919810
+
+s29B2	7919664 // this should be trial 13... 

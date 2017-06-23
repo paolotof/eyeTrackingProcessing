@@ -28,37 +28,36 @@ string eliminateRedundantTrials(string& trial2beIncluded, string& interpolationF
 	}
 	string subTrial = "none";
 	int numTrial = 0;
-	
 	while (true)
 	{
-		if (interpInfo.eof())
-			break;
 		string line1, line2;
 		getline(interpInfo, line1);
+		if (interpInfo.eof())
+			break;
 		getline(interpInfo, line2);
+		if (interpInfo.eof())
+			break;
 		istringstream secondLine(line2);
 		string interpSub;
 		int interpTrial;
 		secondLine >> interpSub >> interpTrial;
-		interpSub.erase(interpSub.end()-4,interpSub.end()); // remove '.asc' from name
-		string line;
-// 		while (true)
+// 		interpSub.erase(interpSub.end()-4, interpSub.end()); // remove '.asc' from name
+// the approach above gives problems with Leanne's data
+		// remove '.asc' from name
+		size_t found = interpSub.find(".asc");
+		if (found != string::npos)
+			interpSub.erase(found, string::npos);
 		if (( subTrial == interpSub) &&
-			(numTrial == interpTrial) )
-		{
+			(numTrial == interpTrial) ) {
 			outputfile << line1 << '\n';
 			outputfile << line2 << '\n';
 		} else {
-			while (getline(trialInfoFile, line))
-			{
-	// 			getline(trialInfoFile, line);
+			string line;
+			while (getline(trialInfoFile, line)) {
 				istringstream trialLine(line);
-	// 			string subTrial;
-	// 			int numTrial;
 				trialLine >> subTrial >> numTrial;
 				if ( (subTrial == interpSub) &&
-					(numTrial == interpTrial) )
-				{
+					(numTrial == interpTrial) ) {
 					outputfile << line1 << '\n';
 					outputfile << line2 << '\n';
 					// multiple lines might have interpolation information for one trial
@@ -68,8 +67,6 @@ string eliminateRedundantTrials(string& trial2beIncluded, string& interpolationF
 					break;
 				if ((subTrial == interpSub) && (numTrial > interpTrial))
 					break;
-	// 			if (trialInfoFile.eof())
-	// 				break;
 			}
 		}		
 	}	
@@ -77,46 +74,6 @@ string eliminateRedundantTrials(string& trial2beIncluded, string& interpolationF
 	interpInfo.close();
 	trialInfoFile.close();
 	outputfile.close();
+// 	cout << "done";
 	return newInterpolationFile;
-	
-// 	while (true)
-// 	{
-// 		if (trialInfoFile.eof())
-// 			break;
-// 		string line;
-// 		getline(trialInfoFile, line);
-// 		istringstream trialLine(line);
-// 		string subTrial;
-// 		int numTrial;
-// 		trialLine >> subTrial >> numTrial;
-// 		
-// 		while (true)
-// 		{
-// 			if (subTrial < interpSub)
-// 				break;
-// 			if ((subTrial == interpSub) &&
-// 				(numTrial < interpTrial) )
-// 				break;
-// 			if (interpInfo.eof())
-// 				break;
-// 			
-// 			string line1, line2;
-// 			getline(interpInfo, line1);
-// 			getline(interpInfo, line2);
-// 			istringstream secondLine(line2);
-// 			string interpSub;
-// 			int interpTrial;
-// 			secondLine >> interpSub >> interpTrial;
-// 			interpSub.erase(interpSub.end()-4,interpSub.end()); // remove '.asc' from name
-// 			
-// 			if ( (subTrial == interpSub) &&
-// 				(numTrial == interpTrial) )
-// 			{
-// 				outputfile << line1 << '\n';
-// 				outputfile << line2 << '\n';
-// 				// multiple lines might have interpolation information for one trial
-// 			}
-// 		}
-// 	}	
-	
 }

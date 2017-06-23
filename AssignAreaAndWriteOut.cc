@@ -21,7 +21,7 @@ size_t AssignAreaAndWriteOut(double (*dataArray), ofstream& outputfile, TrialInf
   outputfile << trialSet.g_subject() 
     << '\t' << timeNow  
     << '\t' << timeDif
-    << '\t' << trialSet.totalBins()
+//     << '\t' << trialSet.totalBins()
     << '\t' << trialSet.g_condition() 
     << '\t' << trialSet.g_trialIN() 
 		<< '\t' << trialSet.g_target() 

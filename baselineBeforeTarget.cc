@@ -2,7 +2,6 @@
 
 size_t baselineBeforeTarget(string filename, string& eye2read, size_t interval4baseline)
 {
-	cout << eye2read << " \n";
 	cout << "Computing baseline before AUDIO target onset\n";
 	ifstream eyetrackingFile(eye2read);
   if (!eyetrackingFile.is_open())

@@ -1,6 +1,6 @@
 #include "main.ih"
 
-size_t averageFirst200(string filename, size_t interval4baseline)
+size_t averageFirst200(string filename, size_t interval4baseline, bool print2screen)
 {
   ifstream subInfoFile("subnames.txt");
   if (!subInfoFile.is_open())
@@ -32,7 +32,8 @@ size_t averageFirst200(string filename, size_t interval4baseline)
 				vector<double> ypos;
 				vector<double> psize;
 				
-				cout << subID << ' ';
+				if (print2screen)
+					cout  << subID << ' ';
 				string line;
 				while (getline(eyetrackingFile, line))
 				{
@@ -45,7 +46,8 @@ size_t averageFirst200(string filename, size_t interval4baseline)
 					{
 						exportBaseline(xpos, ypos, psize, subID, "1", outputfile);
 						eyetrackingFile.close();
-						cout << " processed \n";
+						if (print2screen)
+							cout << " processed \n";
 						vector<double>().swap(xpos);
 						vector<double>().swap(ypos);
 						vector<double>().swap(psize);

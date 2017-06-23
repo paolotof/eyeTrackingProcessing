@@ -1,5 +1,8 @@
 #include "main.ih"
 
+/* in this function timeBefore is only used to define the filename but it is never used 
+ to define which time interval is actually used. */ 
+
 void ERDD_withBase123(string& outputfileName, size_t timeBefore)
 {
 	string fillersOrNot = "withFillers";
@@ -32,7 +35,8 @@ void ERDD_withBase123(string& outputfileName, size_t timeBefore)
 // PROCESS EYETRACKING FILE
 	// initialize variables
 	string pp, condition, item, exp;
-	size_t clockTime, bin,	trial;
+// 	size_t clockTime, bin,	trial;
+	size_t clockTime,	trial;
 	double time; // time might be double in the interpolated lines
 	float psize, fix, target, competitor, d1, d2;
 	// all the values below are initiliazed to remove the warning: 
@@ -47,8 +51,10 @@ void ERDD_withBase123(string& outputfileName, size_t timeBefore)
 	while (getline(processedFile, line))
 	{
 		istringstream linedata(line);
-		linedata >> pp >> clockTime >> time >> bin >> condition >> trial >> 
-			item >> exp >> psize >> target >> competitor >> d1 >> d2 >> fix; 
+// 		linedata >> pp >> clockTime >> time >> bin >> condition >> trial >> 
+// 			item >> exp >> psize >> target >> competitor >> d1 >> d2 >> fix; 
+		linedata >> pp >> clockTime >> time >> condition >> trial >> item 
+			>> exp >> psize >> target >> competitor >> d1 >> d2 >> fix; 
 		
 		// update baselines when eyetracking file goes from one trial to the next
 		if (oldTrial != trial)

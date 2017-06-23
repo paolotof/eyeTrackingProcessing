@@ -1,4 +1,3 @@
- 
 // Inspect the following #defines. Change them to taste. If you don't
 // need a particular option, change its value into an empty string
 // For more information about this file: 'man 7 icmconf'
@@ -9,7 +8,7 @@
 #define ADD_LIBRARY_PATHS ""
 // Uncomment to clear the screen just before starting the compilation
 // process
-#define CLS
+//#define CLS
 // The compiler to use. Define CC instead if a C compiler should be used.
 #define CXX "g++"
 //#define CC "gcc"

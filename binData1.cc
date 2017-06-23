@@ -38,7 +38,6 @@ size_t binData(string filename, size_t lines2bin)
 		binnedData << "psize";
 	binnedData << '\t' << "fix\n";
 		
-  
   vector<double> timeV; // time
   vector<double> fixV;  // fixations
 	vector<double> psizeV; // psize

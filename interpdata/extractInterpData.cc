@@ -11,8 +11,12 @@ Interpdata Interpdata::extractInterpData(string& lineBegin, string& lineEnd)
   firstLine >> sub >> ntrial >> ibeg >> xBeg >> yBeg >> pBeg;
 
   Interpdata data;
-  sub.erase(sub.end()-4,sub.end()); // remove '.asc' from file name
-  data.setSub(sub); 
+  // sub.erase(sub.end()-4,sub.end()); // remove '.asc' from file name
+  // NOTE: the above approach does not work for Leanne's data
+	size_t found = sub.find(".asc");
+	if (found != string::npos)
+		sub.erase(found, string::npos);
+	data.setSub(sub); 
   data.setNtrial(ntrial);
   data.setBegin(ibeg);
   data.setBegX(xBeg);

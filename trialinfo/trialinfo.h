@@ -28,7 +28,8 @@ class TrialInfo
   bool d_updateInterp = false; // 26-4-16: assigned a default so that it is valid if running people without interpolation 
   size_t d_limit4extraction = 4000; // this values is never used, only kept for backward compatibility
   size_t d_timeIsUp;
-  
+	size_t d_exportStart;
+	
   public:
     TrialInfo();
     
@@ -47,7 +48,7 @@ class TrialInfo
     void setTarget(string Target);
     void setTargetLoc(string TargetLoc);
     void setTargetStarts(size_t TargetStarts);
-    void setTimeIsUp();
+		void setTimeIsUp();
     void setTrialIN(size_t Trial);
     void addOneBin();
     void updateBinCount(size_t nBins);
@@ -55,8 +56,9 @@ class TrialInfo
     void extractInfo(string& line);
     void resetAndUpdate(ifstream& trialInfoFile);
     void resetBinsCounter();
-    void updateCurrentTrial(string& line);
+    void updateCurrentTrial(string& line, size_t timeBefore);
     void updateInterp(bool value); 
+		void setExportStarts(size_t ExportStarts);
 // GETTERS    
     // there is a g in front of the name because it's then easier to recognize the file names of set versus get functions.
     size_t g_Bin() const;
@@ -78,6 +80,7 @@ class TrialInfo
     size_t limit4extraction() const; // this value is set with a default and never modified
     size_t timeIsUp() const;
     size_t totalBins() const;
+		size_t startExport() const;
 
   private:
 };

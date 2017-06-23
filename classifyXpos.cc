@@ -12,8 +12,7 @@ char classifyXpos(double xpos, bool charlotte)
   if (xpos > 660.0 && xpos < 1240.0)
     pos = 'R';
 
-  if (charlotte)
-  {
+  if (charlotte) {
     if (xpos < 602.0 && xpos > 72.0) //  if (xpos < 600.0 && xpos > 100.0)
       pos = 'L';
     if (xpos > 678.0 && xpos < 1208.0) // (xpos > 680.0 && xpos < 1180.0)

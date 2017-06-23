@@ -1,6 +1,6 @@
 #include "main.ih"
 
-size_t average200BeforeVisualOnset(string filename, size_t interval4baseline)
+size_t average200BeforeVisualOnset(string filename, size_t interval4baseline, bool print2screen)
 {
 	// noFillers or withFillers are irrelevant for this analysis.
 // 	if (filename.find("noFillers") != string::npos)
@@ -37,8 +37,8 @@ size_t average200BeforeVisualOnset(string filename, size_t interval4baseline)
 				vector<double> xpos;
 				vector<double> ypos;
 				vector<double> psize;
-				
-				cout << subID << ' ';
+				if (print2screen)
+					cout << subID << ' ';
 				string line;
 				while (getline(eyetrackingFile, line))
 				{
@@ -91,7 +91,9 @@ size_t average200BeforeVisualOnset(string filename, size_t interval4baseline)
 				} // end of "while(getline(eyetrackingFile, line))"
 				
 				eyetrackingFile.close();
-				cout << " processed \n";
+				
+				if (print2screen)
+					cout  << " processed \n";
       } // end "if(! eyetrackingFile.is_open()") 
     } // end "while(getline(subInfoFile, subID))"
     
