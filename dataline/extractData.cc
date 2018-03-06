@@ -19,8 +19,10 @@ void Dataline::extractData(string& line)
     istringstream linedata(line);
     linedata >> time >> xpos >> ypos >> psize; 
 
-    if (!xpos) // when the read fails, as for example during blinks
-      Dataline::setValidity(false);
+//     if (!xpos) // when the read fails, as for example during blinks
+//       Dataline::setValidity(false);
+		if (linedata.fail())
+			Dataline::setValidity(false);
     else
     {
       Dataline::setTime(time);
@@ -29,7 +31,24 @@ void Dataline::extractData(string& line)
       Dataline::setSize(psize);
       Dataline::setValidity(true);
     }
+    // 30/1/2018 - it can happen that xpos is 0.0, does it get skipped then? 
+    // yes but adding it does not solve the problem, then we get stuck with 
+    // blinks
+//     if (xpos == 0.0 && ypos > 0.0){
+// 			Dataline::setTime(time);
+// 			Dataline::setX(xpos);
+// 			Dataline::setY(ypos);
+// 			Dataline::setSize(psize);
+// 			Dataline::setValidity(true);
+// 		}
+// 		if (xpos > 0.0 && ypos == 0.0){
+// 			Dataline::setTime(time);
+// 			Dataline::setX(xpos);
+// 			Dataline::setY(ypos);
+// 			Dataline::setSize(psize);
+// 			Dataline::setValidity(true);
+// 		}
+		
   }
-  
   //return (eye);
 }

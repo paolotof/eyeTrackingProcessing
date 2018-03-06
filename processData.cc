@@ -125,7 +125,6 @@ size_t processData(string& trial2beIncluded, string filename,
 							getline(interpInfo, line2);
 							interpolation = interpolation.extractInterpData(line1, line2);
 // 							cout << '\n' << line2;
-// 							cout << line2;
 						}
 						trialSet.updateInterp(false); // I think we can leave it to false then
 						// we can read another line if the subject, trial and time of interpInfo 
@@ -175,7 +174,9 @@ size_t processData(string& trial2beIncluded, string filename,
 							} else {  
 								// stop exporting data if the data should be interpolated, this is 
 								// to export interpolate data from before the SBLINK message:
-								if (eye.g_time() <= interpolation.iBegin()) {
+								// 13-02-2018, it should also export data after interpolation intervals
+								if (eye.g_time() <= interpolation.iBegin()
+									|| eye.g_time() >= interpolation.iEnd()) {
 									double dataArray[4] = {0, 0, 0, 0}; 
 									dataArray[0] = eye.g_time();
 									dataArray[1] = eye.g_xpos();
