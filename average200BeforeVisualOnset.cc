@@ -11,9 +11,8 @@ size_t average200BeforeVisualOnset(string filename, size_t interval4baseline, bo
 	// read file with subject to include
 	ifstream subInfoFile("subnames.txt");
   if (!subInfoFile.is_open())
-    cout << "Unable to open subnames.txt\n";
-  else
-  { 
+		cout << "average200BeforeVisualOnset:: Unable to open subnames.txt\n";
+  else { 
     ofstream outputfile;
 //     filename.append("average200_BeforeVisualOnset.asc");
 		string otherBitFilename = "average" + to_string(interval4baseline) + "_BeforeVisualOnset.asc";
@@ -22,16 +21,12 @@ size_t average200BeforeVisualOnset(string filename, size_t interval4baseline, bo
 		outputfile << "pp" << '\t'  << "tr" << '\t'  << "x" << '\t' << "y" << '\t' << "psize"  << '\n';  
     
     string subID;
-    while (getline(subInfoFile, subID))
-    {
+    while (getline(subInfoFile, subID)) {
       ifstream eyetrackingFile(subID);
-      if (! eyetrackingFile.is_open())
-      {
-				cout << "Unable to open eyetracking datafile " << subID << '\n';
+      if (! eyetrackingFile.is_open()) {
+				cout << "average200BeforeVisualOnset:: Unable to open eyetracking datafile " << subID << '\n';
 				break;
-      }
-      else
-      {
+      } else {
 				Dataline eye;
 				
 				vector<double> xpos;
@@ -47,10 +42,9 @@ size_t average200BeforeVisualOnset(string filename, size_t interval4baseline, bo
 						(line.find("BLINK") != string::npos) || (line.find("BUTTON") != string::npos))
 						getline(eyetrackingFile, line);
 						
-					if (line.find("onsetVisualStim") != string::npos)
-					{
+					if (line.find("onsetVisualStim") != string::npos)	{
 						string trialNum = line.substr(line.find("=") + 1, 
-																					line.find("onset") - (line.find("=") + 1));
+								line.find("onset") - (line.find("=") + 1));
 						
 						if (xpos.size() > 10)
 							exportBaseline(xpos, ypos, psize, subID, trialNum, outputfile);
@@ -59,8 +53,7 @@ size_t average200BeforeVisualOnset(string filename, size_t interval4baseline, bo
 						vector<double>().swap(ypos);
 						vector<double>().swap(psize);
 						
-						while (getline(eyetrackingFile, line))
-						{
+						while (getline(eyetrackingFile, line))	{
 							if (line.find("TRIAL ENDS") != string::npos)
 								break;
 						}
@@ -69,24 +62,20 @@ size_t average200BeforeVisualOnset(string filename, size_t interval4baseline, bo
 					eye.extractData(line);
 					
 // 					if (eye.isMSG() == false)
-					if (eye.isValid() == true)
-					{
+					if (eye.isValid() == true)					{
 						size_t lines2include = interval4baseline / 4;// 50; // 200 ms is 50 lines each sampled every 4 seconds
-						if (xpos.size() >= lines2include)
-						{
+						if (xpos.size() >= lines2include)						{
 							xpos.push_back(eye.g_xpos());
 							xpos.erase(xpos.begin());
 							ypos.push_back(eye.g_ypos());
 							ypos.erase(ypos.begin());
 							psize.push_back(eye.g_psize());
 							psize.erase(psize.begin());
-						}
-						else
-						{
+						} else {
 							xpos.push_back(eye.g_xpos());
 							ypos.push_back(eye.g_ypos());
 							psize.push_back(eye.g_psize());
-						}
+						} 
 					} // if (eye.isMSG() == false)
 				} // end of "while(getline(eyetrackingFile, line))"
 				

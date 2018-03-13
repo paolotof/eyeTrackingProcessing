@@ -3,20 +3,23 @@
 /* in this function timeBefore is only used to define the filename but it is never used 
  to define which time interval is actually used. */ 
 
-void ERDD_withBase123(string& outputfileName, size_t timeBefore)
+void ERDD_withBase123(string& outputfileName, size_t timeBefore, 
+											size_t baselineLength, string& filePrefix)
 {
 	string fillersOrNot = "withFillers";
 	if (outputfileName.find("noFillers") != string::npos)
 		fillersOrNot = "noFillers";
 
 	string file;
-	file += string("RT_") + fillersOrNot + "_" + std::to_string(timeBefore) + 
-		"_ALL_medianInterp.asc";
+// 	file += string("RT_") + fillersOrNot + "_" + std::to_string(timeBefore) + 
+// 		"_ALL_medianInterp.asc";
+	file += filePrefix + fillersOrNot + "_" + std::to_string(timeBefore) + 
+	"_ALL_medianInterp.asc";
 // CHECK THAT FILES EXIST!	
 	ifstream processedFile(file);
 	if (not processedFile.is_open())
 	{
-		cout << file << " does not exist\n"; 
+		cout << "ERDD_withBase123:: " << file << " does not exist\n"; 
 		return;
 	} 
 //	
@@ -48,8 +51,7 @@ void ERDD_withBase123(string& outputfileName, size_t timeBefore)
 	double b3_psize = 0;
 	
 // loop
-	while (getline(processedFile, line))
-	{
+	while (getline(processedFile, line)) {
 		istringstream linedata(line);
 // 		linedata >> pp >> clockTime >> time >> bin >> condition >> trial >> 
 // 			item >> exp >> psize >> target >> competitor >> d1 >> d2 >> fix; 
@@ -57,14 +59,17 @@ void ERDD_withBase123(string& outputfileName, size_t timeBefore)
 			>> exp >> psize >> target >> competitor >> d1 >> d2 >> fix; 
 		
 		// update baselines when eyetracking file goes from one trial to the next
-		if (oldTrial != trial)
-		{
-			b1_psize = matchBaselines(pp, trial, "RT_averageBeforeTarget200.asc");
-			b3_psize = matchBaselines(pp, trial, "RT_average200_BeforeVisualOnset.asc");
+		if (oldTrial != trial) {
+			if (filePrefix.find("word") != string::npos)
+				b1_psize = matchBaselines(pp, trial, (filePrefix + "averageBeforeTarget"
+				+ std::to_string(baselineLength) + ".asc"));
+			b3_psize = matchBaselines(pp, trial, (filePrefix + "average" 
+			+ std::to_string(baselineLength) + "_BeforeVisualOnset.asc"));
 		}														
 		oldTrial = trial; // synchronizing to  eyetracking file
 		if (oldPp != pp)
-			b2_psize = matchBaselines(pp, 1, "RT_averageFirst200.asc");
+			b2_psize = matchBaselines(pp, 1, (filePrefix + "averageFirst" 
+			+ std::to_string(baselineLength) + ".asc"));
 		oldPp = pp; // updating eyetracking file
 		
 		outputfile << pp  << '\t' << time  << '\t' << condition  

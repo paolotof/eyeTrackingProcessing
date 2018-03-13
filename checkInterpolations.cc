@@ -1,20 +1,20 @@
 #include "main.ih"
 
-void checkInterpolations(string fillersNoFillers){
+void checkInterpolations(string fillersNoFillers, size_t timeBefore){
 	cout << "checking interpolations\n";
 	string fileName = "clean_RT" + fillersNoFillers 
 		+ "_blinksPerSubjectSmaller300.txt";
 	ifstream interpinfo(fileName);
 	if (! interpinfo.is_open())
 	{
-		cout << "Unable to open "<< fileName << '\n';
+		cout << "checkInterpolations:: Unable to open "<< fileName << '\n';
 		return;
 	}
-	fileName = "RT" + fillersNoFillers + "_300_ALL_medianInterp.asc";
+	fileName = "RT" + fillersNoFillers + "_" + std::to_string(timeBefore) + "_ALL_medianInterp.asc";
 	ifstream eyedata(fileName);
 	if (! eyedata.is_open())
 	{
-		cout << "Unable to open "<< fileName << '\n';
+		cout << "checkInterpolations:: Unable to open "<< fileName << '\n';
 		return;
 	}
 	fileName = "reportInterpolations";
@@ -39,12 +39,12 @@ void checkInterpolations(string fillersNoFillers){
 	while (getline(interpinfo, interpline1)){
 		string interpline2;
 		if (interpinfo.eof()){
-			cout << "interpinfo file ended\n";
+			cout << "checkInterpolations:: interpinfo file ended\n";
 			return;
 		}
 		getline(interpinfo, interpline2);
 		if (interpinfo.eof()){
-			cout << "interpinfo file ended\n";
+			cout << "checkInterpolations:: interpinfo file ended\n";
 			return;
 		}
 		interpolation = interpolation.extractInterpData(interpline1, interpline2);
@@ -77,6 +77,6 @@ void checkInterpolations(string fillersNoFillers){
 	interpinfo.close();
 	eyedata.close();
 	reportInt.close();
-	cout << "interpolations check out!!\n";
+	cout << "checkInterpolations:: interpolations check out!!\n";
 	return;
 }

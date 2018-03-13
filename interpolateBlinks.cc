@@ -14,7 +14,9 @@ TrialInfo interpolateBlinks(ifstream& trialInfoFile,
 														ofstream& outputfile, TrialInfo trialSet, 
 														Dataline preBlink, Interpdata interpolation, 
 														bool print2screen, 
-														bool charlotte, size_t timeBefore)
+														bool charlotte, size_t timeBefore, 
+														const char * str2find
+ 													)
 { 
   string line;
 	// loop until end of blink message is found
@@ -32,7 +34,7 @@ TrialInfo interpolateBlinks(ifstream& trialInfoFile,
 			getline(eyetrackingFile, line); 
       return(trialSet);
     }
-    if (line.find("onsetSoundStim") != string::npos)  
+    if (line.find(str2find) != string::npos)  
     {
 			if (print2screen)
 				cout << "\nnew trial starts before blink termination\n";
@@ -65,7 +67,7 @@ TrialInfo interpolateBlinks(ifstream& trialInfoFile,
 			getline(eyetrackingFile, line);
 			return(trialSet);
     }
-    if (line.find("onsetSoundStim") != string::npos) {
+    if (line.find(str2find) != string::npos) {
 			trialSet.updateCurrentTrial(line, timeBefore);
 			trialSet.updateInterp(false);
 			if (print2screen){
@@ -96,7 +98,7 @@ TrialInfo interpolateBlinks(ifstream& trialInfoFile,
 // // 		(preBlink.g_time() >= interpolation.iBegin()) && 
 // // 		(postBlink.g_time() <= interpolation.iEnd()) )
 // // DO NOT TOUCH THIS, DO NOT TRY TO BE SMART, YOU ARE FUCKING STUPID AND 
-// // YOU ARE NOT GOING TO UNCOMMENT THE PIECE BEFORE TO COMMENT THIS ONE
+// // YOU ARE NOT GOING TO UNCOMMENT THE PIECE ABOVE TO COMMENT THIS ONE
 // // BELOW
 // // YOU ARE JUST FUCKING STUPID! DON'T DO IT!!!
 // 		(postBlink.g_time() >= interpolation.iBegin()) && 

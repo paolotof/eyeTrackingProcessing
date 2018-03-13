@@ -23,8 +23,20 @@ void TrialInfo::extractInfo(string& line)
   TrialInfo::setDist2Loc(Dist2Loc);
   TrialInfo::setTarget(Target);
   TrialInfo::setCondition(Condition);
+	// for when it is timelocked to word
   TrialInfo::setTargetStarts(TargetStarts);
   TrialInfo::setRT(RTtime);
+	if (TrialInfo::timeLocking().find("sentence") != string::npos){
+// 		cout << "sentence ";
+		// here we set targetStarts to 0 so that it starts now, but we add it to the reaction times, 
+		// so that it extracts the recording up to the end of the trial
+		TrialInfo::setTargetStarts(0);
+		TrialInfo::setRT(RTtime + TargetStarts); // because the RT is computed from the starting of the word
+	} /*else {
+		cout << "word ";
+		TrialInfo::setTargetStarts(TargetStarts);
+		TrialInfo::setRT(RTtime);
+	}*/
   TrialInfo::setSubCond(SubCond);
   TrialInfo::setBin(0); // reset counter
   TrialInfo::setCurrentTr(TrialInfo::g_currentTr());

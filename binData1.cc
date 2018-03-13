@@ -12,7 +12,7 @@ size_t binData(string filename, size_t lines2bin)
   ifstream datafile(filename);
   if (! datafile.is_open())
   {
-    cout << "datafile to bin does not exists\n";
+		cout << "binData1:: datafile to bin does not exists\n";
     return (0);
   }
   
@@ -22,7 +22,7 @@ size_t binData(string filename, size_t lines2bin)
   binnedData.open(filename);//, std::ios::app); 
   if (! binnedData.is_open())
   {
-    cout << "binned file NOT created\n";
+		cout << "binData1:: binned file NOT created\n";
     return (0);
   }
 // write header 

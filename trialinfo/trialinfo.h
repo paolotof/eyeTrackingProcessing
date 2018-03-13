@@ -18,6 +18,7 @@ class TrialInfo
   string d_dist2Loc;
   string d_target;
   string d_condition;
+	string d_timeLocking;// 	TrialInfo::timeLocking;
   size_t d_targetStarts;
   size_t d_onsetTarget;
   size_t d_RT;
@@ -59,6 +60,7 @@ class TrialInfo
     void updateCurrentTrial(string& line, size_t timeBefore);
     void updateInterp(bool value); 
 		void setExportStarts(size_t ExportStarts);
+		void setTimeLocking(string& line);
 // GETTERS    
     // there is a g in front of the name because it's then easier to recognize the file names of set versus get functions.
     size_t g_Bin() const;
@@ -81,7 +83,8 @@ class TrialInfo
     size_t timeIsUp() const;
     size_t totalBins() const;
 		size_t startExport() const;
-
+		string timeLocking() const;
+		
   private:
 };
  

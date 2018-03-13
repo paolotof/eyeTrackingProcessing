@@ -31,7 +31,8 @@
 //bool checkBlinksAndGetInterpBounds(ifstream& trialInfoFile, size_t reportType, string filename, string dir2save)
 string checkBlinksAndGetInterpBounds(string filename, 
 																		 string nameOutputfile, bool print2screen, 
-																		 size_t timeBefore)
+																		 size_t timeBefore, 
+																		 const char * str2find, string& timeLocking)
 {
 	cout << "Blinks and interpolation\n";
 	
@@ -57,6 +58,7 @@ string checkBlinksAndGetInterpBounds(string filename,
 	while (getline(trialInfoFile, trialInfo))
   {
     trialSet.extractInfo(trialInfo);
+		trialSet.setTimeLocking(timeLocking);
     string subNum = trialSet.g_subject();  
     ifstream eyetrackingFile(subNum.append(".asc"));
     if (! eyetrackingFile.is_open())
@@ -82,7 +84,7 @@ string checkBlinksAndGetInterpBounds(string filename,
 			bool includeTrial = true;
       while (getline(eyetrackingFile, line)) {
 // BEGINNING OF SENTENCE SOUND
-				if (line.find("onsetSoundStim") != string::npos){
+				if (line.find(str2find) != string::npos){
 					trialSet.updateCurrentTrial(line, timeBefore);
 					// skip all trials which shouldn't be included
 // 					cout << "skipping " << trialSet.g_currentTr() 

@@ -4,7 +4,7 @@ size_t averageFirst200(string filename, size_t interval4baseline, bool print2scr
 {
   ifstream subInfoFile("subnames.txt");
   if (!subInfoFile.is_open())
-    cout << "Unable to open subnames.txt\n";
+		cout << "averageFirst200:: Unable to open subnames.txt\n";
   else
   { 
     ofstream outputfile;
@@ -21,7 +21,7 @@ size_t averageFirst200(string filename, size_t interval4baseline, bool print2scr
       ifstream eyetrackingFile(subID);
       if (! eyetrackingFile.is_open())
       {
-				cout << "Unable to open eyetracking datafile " << subID << '\n';
+				cout << "averageFirst200:: Unable to open eyetracking datafile " << subID << '\n';
 				break;
       }
       else

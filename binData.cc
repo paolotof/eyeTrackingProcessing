@@ -12,7 +12,7 @@ size_t binData(string filename)
   
   if (! datafile.is_open())
   {
-    cout << "datafile to bin does not exists\n";
+		cout << "binData:: datafile to bin does not exists\n";
     return (0);
   }
 
@@ -25,7 +25,7 @@ size_t binData(string filename)
   binnedData.open(tmp); 
   if (! binnedData.is_open())
   {
-    cout << "binned file does not exists\n";
+		cout << "binData:: binned file does not exists\n";
     return (0);
   }
   

@@ -3,7 +3,7 @@
  * but now it only parses the line with the information of the beginning of the 
  * trial and then set the beginning of the target. 
  * Start and end of export interval are set by setExportStarts.cc
- * It is a bit of a waste but I do not have time to fix right now
+ * It is a bit of a waste but I do not have time to fix it right now
 */
 
 //TrialInfo TrialInfo::computeTargetLimits(string line, TrialInfo trialSet)

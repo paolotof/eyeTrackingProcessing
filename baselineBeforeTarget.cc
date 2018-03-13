@@ -21,14 +21,14 @@ size_t baselineBeforeTarget(string filename, string& eye2read, size_t interval4b
 		// include in the vector which will be averaged 
 		// now read data
 		vector<double> psize;
-		while(getline(eyetrackingFile, eyeData))
-		{
+		while(getline(eyetrackingFile, eyeData)){
 			string pp, condition, item, exp;
 			double clockTime, time, pupilSize, target, competitor, d1, d2, fix;
-			size_t bin, trial; 
+// 			size_t bin, 
+			size_t trial; 
 			
 			istringstream linedata(eyeData);
-			linedata >> pp >> clockTime >> time >> bin >> 
+			linedata >> pp >> clockTime >> time >> //bin >> 
 				condition >> trial >> item >> exp >> pupilSize >> 
 				target >> competitor >> d1 >> d2 >> fix;
 				

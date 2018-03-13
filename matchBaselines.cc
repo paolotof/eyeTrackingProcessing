@@ -5,7 +5,7 @@ double matchBaselines(string& pp, size_t trial, string baseline2read)
 	ifstream baselineFile(baseline2read);
 	if (not baselineFile.is_open())
 	{
-		cout << baseline2read << " does not exist\n"; 
+		cout << "matchBaselines:: "<< baseline2read << " does not exist\n"; 
 		return 0;
 	}
 	string line;

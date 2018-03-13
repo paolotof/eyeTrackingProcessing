@@ -8,8 +8,8 @@
 
 size_t processData(string& trial2beIncluded, string filename, 
 									 bool charlotte, size_t timeBefore, 
-									 bool print2screen, string filePrefix)
-{
+									 bool print2screen, string filePrefix, 
+									 const char * str2find, string& timeLocking){
 	string interpolationFile;
 	string fillers;
   if (filename.find("noFillers") != string::npos) {
@@ -47,8 +47,15 @@ size_t processData(string& trial2beIncluded, string filename,
 	string trialInfo;
 	getline(trialInfoFile, trialInfo);
 	TrialInfo trialSet;
+	trialSet.setTimeLocking(timeLocking);
 	trialSet.extractInfo(trialInfo);
 	trialSet.updateInterp(false); 
+// 	cout << trialSet.timeLocking() << '\n';
+// 	cout << "a match was ";
+// 	if (trialSet.timeLocking().find("sentence") != string::npos)
+// 		cout << "found\n";
+// 	return 0;
+	
 // 	trialSet.updateInterp(true); // set to true because the file has not been read once
 	string subNum = trialSet.g_subject();  
   
@@ -84,7 +91,7 @@ size_t processData(string& trial2beIncluded, string filename,
 					getline(eyetrackingFile, line);
 // update trila counter at each onsetSoundStim and 
 // skip all trials which shouldn't be included
-				if (line.find("onsetSoundStim") != string::npos){
+				if (line.find(str2find) != string::npos){
 					trialSet.updateCurrentTrial(line, timeBefore);
 					// NO! in some cases we need data before the onsetSoundStim
 // 					cout << "skipping " << trialSet.g_currentTr() 
@@ -109,7 +116,7 @@ size_t processData(string& trial2beIncluded, string filename,
 				if (line.find("SBLINK") != string::npos) {
 					trialSet = interpolateBlinks(trialInfoFile, eyetrackingFile, outputfile, 
 									trialSet, preBlink, interpolation, print2screen, 
-									charlotte, timeBefore);
+									charlotte, timeBefore, str2find);
 					if (trialSet.g_updateInterp()) {
 						// read eye-tracking file up to line after interpolated data 
 						// this avoids repetitions

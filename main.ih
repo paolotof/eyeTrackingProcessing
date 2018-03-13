@@ -46,7 +46,7 @@ size_t binData(string filename, size_t lines2bin);
 
 string checkBlinksAndGetInterpBounds(string filename, 
 																		 string nameOutputfile, bool print2screen, 
-																		 size_t timeBefore);
+																		 size_t timeBefore, const char * str2find, string& timeLocking);
 char classifyXpos(double xpos, bool charlotte);
 char classifyYpos(double ypos, bool charlotte);
 size_t classifyArea(double xpos, double ypos, const string& pos2match, 
@@ -64,7 +64,7 @@ int getFixationsFromSentenceOnset(ifstream& trialInfoFile);
 TrialInfo interpolateBlinks(ifstream& trialInfoFile, ifstream& eyetrackingFile, 
 														ofstream& outputfile, TrialInfo trialSet, 
 														Dataline preBlinK, Interpdata interpolation, 
-														bool print2screen, bool charlotte, size_t timeBefore);
+														bool print2screen, bool charlotte, size_t timeBefore, const char * str2find);
 
 bool interpolateLongBlinks(ofstream& outputfile, TrialInfo trialSet, 
 													 Interpdata interpolation, bool charlotte);
@@ -74,7 +74,7 @@ double mean(double v[], size_t n);
 
 size_t processData(string& trial2beIncluded, string filename, 
 									 bool charlotte, size_t timeBefore, bool print2screen, 
-									 string filePrefix);
+									 string filePrefix, const char * str2find, string& timeLocking);
 
 double sum(double v[], size_t n);
 
@@ -84,7 +84,7 @@ double vectorMean(vector<double> values);
 size_t writeOut(Dataline eye, ofstream& outputfile, TrialInfo trialSet);
 
 size_t binTimeInterval(string filename, size_t timeInterval);
-void ERDD_withBase123(string& outputfileName, size_t timeBefore);
+void ERDD_withBase123(string& outputfileName, size_t timeBefore, size_t baselineLength, string& filePrefix);
 double matchBaselines(string& pp, size_t trial, string baseline2read);
 
 
@@ -105,4 +105,4 @@ struct median_t {
 void exportInterpolation(ofstream& shortBlinksReport, TrialInfo trialSet, 
 												 median_t medv, median_t medAfter);
 
-void checkInterpolations(string fillersNoFillers);
+void checkInterpolations(string fillersNoFillers, size_t timeBefore);
